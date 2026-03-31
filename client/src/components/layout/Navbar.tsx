@@ -14,8 +14,16 @@ const FacebookIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+import { Link, useLocation } from "react-router-dom";
+
 export function Navbar() {
-  const links = ["Home", "About", "Gallery", "Books"];
+  const location = useLocation();
+  const links = [
+    { name: "Home", path: "/" },
+    { name: "About", path: "/#about" },
+    { name: "Gallery", path: "/gallery" },
+    { name: "Books", path: "/#books" }
+  ];
 
   return (
     <nav className="w-full flex items-center justify-between px-6 md:px-12 py-4 bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] fixed top-0 z-50">
@@ -26,7 +34,7 @@ export function Navbar() {
         animate={{ opacity: 1, x: 0 }}
         className="flex items-center space-x-3 cursor-pointer group"
       >
-        <div className="relative flex items-center justify-center w-12 h-12 bg-transparent rounded-lg group-hover:bg-primary/5 transition-colors overflow-hidden">
+        <Link to="/" className="relative flex items-center justify-center w-12 h-12 bg-transparent rounded-lg group-hover:bg-primary/5 transition-colors overflow-hidden">
           <img 
             src="/src/assets/logo.png" 
             alt="MA Logo" 
@@ -36,7 +44,7 @@ export function Navbar() {
               (e.target as HTMLImageElement).outerHTML = `<span class="text-2xl font-bold tracking-tighter text-gray-900" style="font-family: sans-serif;">M<span class="absolute left-3.5 top-3">A</span></span>`;
             }}
           />
-        </div>
+        </Link>
         <span className="font-bold text-sm tracking-tight text-gray-800">Muhammad Ali</span>
       </motion.div>
 
@@ -47,17 +55,21 @@ export function Navbar() {
         transition={{ delay: 0.1 }}
         className="hidden md:flex items-center space-x-10 text-gray-600 font-medium text-sm"
       >
-        {links.map((link) => (
-          <li key={link}>
-            <a 
-              href={`#${link.toLowerCase()}`}
-              className="hover:text-primary transition-all duration-300 relative group py-2"
-            >
-              {link}
-              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-primary transition-all duration-300 group-hover:w-full rounded-full"></span>
-            </a>
-          </li>
-        ))}
+        {links.map((link) => {
+          const isActive = location.pathname === link.path || (link.path === '/' && location.pathname === '');
+          
+          return (
+            <li key={link.name}>
+              <Link 
+                to={link.path}
+                className={`transition-all duration-300 relative group py-2 ${isActive ? 'text-primary' : 'hover:text-primary'}`}
+              >
+                {link.name}
+                <span className={`absolute left-0 bottom-0 h-[2px] bg-primary transition-all duration-300 rounded-full ${isActive ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+              </Link>
+            </li>
+          );
+        })}
       </motion.ul>
 
       {/* Social Links Container */}
