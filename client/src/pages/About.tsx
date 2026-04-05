@@ -1,6 +1,10 @@
-<<<<<<< HEAD
+
 import { motion, type Variants } from "framer-motion";
+import { Navbar } from "@/components/layout/Navbar";
+import { SimpleBackground } from "@/components/layout/SimpleBackground";
+import { Footer } from "@/components/layout/Footer";
 import { Link } from "react-router-dom";
+import { DynamicButton } from "@/components/ui/DynamicButton";
 import { 
   BookOpen, 
   GraduationCap, 
@@ -37,7 +41,11 @@ const staggerContainer: Variants = {
 
 export default function About() {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans pt-24 overflow-hidden">
+    <main className="min-h-screen font-sans antialiased text-slate-900 relative flex flex-col bg-slate-50">
+      <SimpleBackground />
+      <Navbar />
+      
+      <div className="flex-1 text-slate-900 font-sans pt-24 overflow-hidden">
       
       {/* 1. Hero Section */}
       <section className="relative max-w-7xl mx-auto px-6 md:px-12 pt-16 pb-24 md:py-32">
@@ -74,7 +82,7 @@ export default function About() {
           >
             <div className="absolute inset-0 bg-amber-200/50 rounded-2xl transform translate-x-4 translate-y-4 -z-10"></div>
             <img 
-              src="https://images.unsplash.com/photo-1455390582262-044cdead27d8?q=80&w=2000&auto=format&fit=crop" 
+              src="https://images.unsplash.com/photo-1725452119240-cafe017c8832?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
               alt="Mohammed Ali Burhan holding a book" 
               className="w-full h-auto max-h-[600px] object-cover rounded-2xl shadow-xl grayscale-[20%] hover:grayscale-0 transition-all duration-700"
             />
@@ -317,46 +325,26 @@ export default function About() {
             <p className="text-lg text-slate-600 max-w-2xl mx-auto">
               Discover the books that capture these life experiences, or explore a visual recounting of the journey.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
-              <Link to="/#books" className="flex items-center space-x-2 px-8 py-4 bg-slate-900 text-white rounded-full font-medium hover:bg-slate-800 transition-colors">
-                <span>Explore Books</span>
-                <ArrowRight className="w-5 h-5" />
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6 w-full">
+              <Link to="/gallery?tab=Books" className="w-full sm:w-auto">
+                <DynamicButton className="h-14 px-8 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] font-semibold text-lg hover:-translate-y-1 flex items-center justify-center space-x-2 w-full">
+                  <span>Explore Books</span>
+                  <ArrowRight className="w-5 h-5" />
+                </DynamicButton>
               </Link>
-              <Link to="/gallery" className="flex items-center space-x-2 px-8 py-4 bg-white text-slate-900 border border-slate-200 rounded-full font-medium hover:bg-slate-50 hover:border-slate-300 transition-colors">
-                <span>View Gallery</span>
+              <Link to="/gallery" className="w-full sm:w-auto">
+                <DynamicButton className="h-14 px-8 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] font-semibold text-lg hover:-translate-y-1 flex items-center justify-center space-x-2 w-full">
+                  <span>View Gallery</span>
+                </DynamicButton>
               </Link>
             </div>
           </motion.div>
         </div>
       </section>
 
-    </div>
-=======
-import { Navbar } from "@/components/layout/Navbar";
-import { SimpleBackground } from "@/components/layout/SimpleBackground";
-import { Footer } from "@/components/layout/Footer";
-
-export default function About() {
-  return (
-    <main className="min-h-screen font-sans antialiased text-slate-900 relative flex flex-col">
-      <SimpleBackground />
-      <Navbar />
-      
-      {/* 
-        This is a placeholder for the teammate's work on the About page.
-        They can replace this container's content with their actual logic.
-      */}
-      <div className="flex-1 flex items-center justify-center pt-24 pb-12">
-        <div className="text-center space-y-4 max-w-2xl px-6">
-          <h1 className="text-4xl font-serif font-medium text-slate-800">About</h1>
-          <p className="text-slate-500 font-light text-lg">
-            This page is currently under development by the team.
-          </p>
-        </div>
       </div>
       
       <Footer />
     </main>
->>>>>>> 67797694c3b4ea42ee5b7664cebafcdf92f670f8
   );
 }
