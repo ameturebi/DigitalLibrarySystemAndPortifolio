@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const slideData = [
   {
     image: "/src/assets/hero-1.png",
-    subtitle: "Ethiopian Islamic Philosopher & Author",
+    subtitle: "Ethiopian Philosopher & Author",
     theme: "from-blue-500/20 to-purple-500/20 border-blue-500/30 text-slate-800 hover:bg-blue-50/50",
   },
   {
@@ -32,7 +33,7 @@ export function HeroSection() {
 
   return (
     <section className="relative w-full h-auto min-h-[calc(100vh-80px)] mt-[80px] bg-transparent flex items-center justify-center py-8 lg:py-0 overflow-hidden">
-      
+
       {/* Container spacing setup over the invisible background overlay */}
       <div className="container max-w-7xl mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center gap-8 lg:gap-16 h-full">
 
@@ -65,12 +66,14 @@ export function HeroSection() {
           </div>
 
           <div className="pt-4 drop-shadow-sm">
-            <Button
-              size="lg"
-              className={`h-14 px-8 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] font-semibold text-lg hover:-translate-y-1 transition-all duration-300 bg-gradient-to-r backdrop-blur-md border border-solid ${slideData[currentSlide].theme}`}
-            >
-              Explore Works
-            </Button>
+            <Link to="/gallery">
+              <Button
+                size="lg"
+                className={`h-14 px-8 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] font-semibold text-lg hover:-translate-y-1 transition-all duration-300 bg-gradient-to-r backdrop-blur-md border border-solid ${slideData[currentSlide].theme}`}
+              >
+                Explore Works
+              </Button>
+            </Link>
           </div>
 
           {/* Dots Navigation */}
