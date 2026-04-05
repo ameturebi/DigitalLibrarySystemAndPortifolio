@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 const slideData = [
   {
     image: "/src/assets/hero-1.png",
-    subtitle: "Ethiopian Islamic Philosopher & Author",
+    subtitle: "Ethiopian Philosopher & Author",
     theme: "from-blue-500/20 to-purple-500/20 border-blue-500/30 text-slate-800 hover:bg-blue-50/50",
   },
   {
@@ -32,7 +32,7 @@ export function HeroSection() {
 
   return (
     <section className="relative w-full h-auto min-h-[calc(100vh-80px)] mt-[80px] bg-transparent flex items-center justify-center py-8 lg:py-0 overflow-hidden">
-      
+
       {/* Container spacing setup over the invisible background overlay */}
       <div className="container max-w-7xl mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center gap-8 lg:gap-16 h-full">
 
