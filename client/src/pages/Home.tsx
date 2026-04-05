@@ -3,6 +3,7 @@ import { HeroSection } from "@/components/features/HeroSection";
 import { AnimatedBackground } from "@/components/layout/AnimatedBackground";
 import { Footer } from "@/components/layout/Footer";
 import { Link } from "react-router-dom";
+import { DynamicButton } from "@/components/ui/DynamicButton";
 
 export default function Home() {
   return (
@@ -23,13 +24,20 @@ export default function Home() {
         <HeroSection />
       </div>
 
-      {/* About Section Placeholder */}
-      <div id="about-section" className="relative z-10 w-full min-h-screen snap-start flex items-center justify-center bg-white/40 backdrop-blur-sm">
-        <div className="text-center space-y-4 max-w-2xl px-6">
-          <h2 className="text-4xl font-serif font-medium text-slate-800">About</h2>
-          <p className="text-slate-600 text-lg">
-            (Teammate: Replace this content with the About section logic)
+      {/* About Section */}
+      <div id="about-section" className="relative z-10 w-full min-h-screen snap-start flex items-center justify-center bg-white/40 backdrop-blur-sm py-24">
+        <div className="text-center space-y-8 max-w-4xl px-6">
+          <h2 className="text-4xl md:text-5xl font-serif font-medium text-slate-900 tracking-tight">Author & Educator</h2>
+          <p className="text-slate-600 font-light text-lg max-w-2xl mx-auto">
+            A life dedicated to knowledge, writing, and community. Discover the journey from early curiosity to a lifelong commitment to literature.
           </p>
+          <div className="pt-8 flex justify-center w-full">
+            <Link to="/about" className="inline-block w-full sm:w-auto">
+              <DynamicButton className="h-14 px-8 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] font-semibold text-lg hover:-translate-y-1 flex items-center justify-center w-full">
+                Learn More About Me
+              </DynamicButton>
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -40,11 +48,11 @@ export default function Home() {
           <p className="text-slate-600 font-light text-lg">
             A curated selection of thoughts, dialogues, and historical texts.
           </p>
-          <div className="pt-8 flex justify-center">
-            <Link to="/gallery" className="inline-block">
-              <button className="h-14 px-8 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] font-semibold text-lg hover:-translate-y-1 transition-all duration-300 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 text-slate-800 hover:bg-blue-50/50 backdrop-blur-md flex items-center justify-center w-full">
+          <div className="pt-8 flex justify-center w-full">
+            <Link to="/gallery" className="inline-block w-full sm:w-auto">
+              <DynamicButton className="h-14 px-8 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] font-semibold text-lg hover:-translate-y-1 flex items-center justify-center w-full">
                 Enter Full Gallery
-              </button>
+              </DynamicButton>
             </Link>
           </div>
         </div>
