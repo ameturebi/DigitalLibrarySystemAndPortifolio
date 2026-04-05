@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Lightbox, type MediaItem } from "../components/ui/Lightbox";
 import { Navbar } from "@/components/layout/Navbar";
+import { SimpleBackground } from "@/components/layout/SimpleBackground";
+import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Play } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 
 // Premium Curated Unsplash Images for immediate beautiful rendering
 const initialGalleryItems: MediaItem[] = [
@@ -37,9 +40,10 @@ const initialGalleryItems: MediaItem[] = [
     id: "4",
     type: "image",
     url: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&q=80&w=1600",
-    title: "Literary Collection",
-    description: "Exploring historical texts and author's original manuscripts.",
-    category: "writing"
+    title: "The Legacy of Thought",
+    description: "A deep exploration of historical and philosophical ideas.",
+    category: "books",
+    price: "$19.99"
   },
   {
     id: "5",
@@ -71,9 +75,10 @@ const initialGalleryItems: MediaItem[] = [
     id: "8",
     type: "image",
     url: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=1600",
-    title: "Book Signing",
-    description: "Meet and greet during the launch of the latest publication.",
-    category: "writing"
+    title: "Modern Ethics",
+    description: "An analysis of morals in today's fast-paced society.",
+    category: "books",
+    price: "$24.99"
   },
   {
     id: "9",
@@ -87,9 +92,10 @@ const initialGalleryItems: MediaItem[] = [
     id: "10",
     type: "image",
     url: "https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?auto=format&fit=crop&q=80&w=1600",
-    title: "Study Retreat",
-    description: "Focus and deep reading session.",
-    category: "writing"
+    title: "Meditations on Tech",
+    description: "How technology bridges the gap between our minds and reality.",
+    category: "books",
+    price: "$21.50"
   },
   {
     id: "11",
@@ -109,13 +115,26 @@ const initialGalleryItems: MediaItem[] = [
   }
 ];
 
-const categories = ["All", "Events", "Lectures", "Writing", "Community"];
+const categories = ["All", "Events", "Lectures", "Books", "Community"];
+
+// The unified primary button style derived from Explore Works
+const unifiedButtonStyle = "bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 text-slate-800 hover:bg-blue-50/50 backdrop-blur-md shadow-[0_8px_30px_rgb(0,0,0,0.04)]";
 
 export default function Gallery() {
+  const [searchParams] = useSearchParams();
+  const tabParam = searchParams.get("tab");
+
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedItem, setSelectedItem] = useState<MediaItem | null>(null);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(6);
+
+  useEffect(() => {
+    if (tabParam && categories.includes(tabParam)) {
+      setActiveCategory(tabParam);
+      setVisibleCount(6);
+    }
+  }, [tabParam]);
 
   // Filter items based on active category
   const filteredItems = initialGalleryItems.filter(item => 
@@ -139,13 +158,14 @@ export default function Gallery() {
   };
 
   return (
-    <main className="min-h-screen bg-[#fafafa] font-sans antialiased text-slate-900 relative">
+    <main className="min-h-screen bg-transparent font-sans antialiased text-slate-900 relative flex flex-col">
+      <SimpleBackground />
       <Navbar />
       
       {/* Background Decorative Element */}
       <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-primary/5 to-transparent pointer-events-none z-0" />
 
-      <div className="relative z-10 pt-[140px] pb-24 container max-w-7xl mx-auto px-6">
+      <div className="relative z-10 pt-[140px] pb-24 container max-w-7xl mx-auto px-6 flex-1">
         
         {/* Header Section */}
         <motion.div 
@@ -164,30 +184,25 @@ export default function Gallery() {
 
         {/* Category Filter */}
         <div className="flex flex-wrap justify-center gap-2 mb-12">
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => {
-                setActiveCategory(category);
-                setVisibleCount(6); // Reset visible count on filter change
-              }}
-              className={`relative px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
-                activeCategory === category 
-                  ? "text-primary" 
-                  : "text-slate-500 hover:text-slate-800 hover:bg-slate-100"
-              }`}
-            >
-              {activeCategory === category && (
-                <motion.div
-                  layoutId="activeCategoryIndicator"
-                  className="absolute inset-0 bg-primary/10 rounded-full border border-primary/20"
-                  initial={false}
-                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                />
-              )}
-              <span className="relative z-10 tracking-wide">{category}</span>
-            </button>
-          ))}
+          {categories.map((category) => {
+            const isActive = activeCategory === category;
+            return (
+              <button
+                key={category}
+                onClick={() => {
+                  setActiveCategory(category);
+                  setVisibleCount(6); // Reset visible count on filter change
+                }}
+                className={`relative px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
+                  isActive 
+                    ? unifiedButtonStyle 
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/50 hover:shadow-sm bg-transparent border border-transparent"
+                }`}
+              >
+                <span className="relative z-10 tracking-wide">{category}</span>
+              </button>
+            )
+          })}
         </div>
 
         {/* Gallery Grid */}
@@ -215,14 +230,28 @@ export default function Gallery() {
                 />
 
                 {/* Dark Overlay on Hover */}
-                <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/60 transition-colors duration-300 z-10 flex flex-col justify-end p-6">
+                <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/70 transition-colors duration-300 z-10 flex flex-col justify-end p-6">
                   
                   {/* Content reveals on hover */}
                   <div className="translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-out delay-75">
-                    <span className="text-primary-100/80 text-xs font-semibold uppercase tracking-wider mb-2 block text-white/80">
-                      {item.category}
-                    </span>
-                    <h3 className="text-white text-xl font-medium font-serif">{item.title}</h3>
+                    {item.category === "books" ? (
+                      <>
+                        <h3 className="text-white text-xl font-medium font-serif leading-tight">{item.title}</h3>
+                        {item.price && (
+                          <span className="inline-block mt-2 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-white text-xs font-semibold tracking-wider">
+                            {item.price}
+                          </span>
+                        )}
+                        <p className="text-white/80 text-sm line-clamp-2 mt-3 font-light leading-relaxed">{item.description}</p>
+                      </>
+                    ) : (
+                      <>
+                        <span className="text-white/60 text-xs font-semibold uppercase tracking-wider mb-2 block">
+                          {item.category}
+                        </span>
+                        <h3 className="text-white text-xl font-medium font-serif">{item.title}</h3>
+                      </>
+                    )}
                   </div>
 
                   {/* Play Icon indicator for videos */}
@@ -246,8 +275,7 @@ export default function Gallery() {
           >
             <Button
               onClick={handleLoadMore}
-              variant="outline"
-              className="rounded-full px-8 h-12 border-slate-300 text-slate-600 hover:bg-slate-50 hover:text-slate-900 hover:border-slate-400 transition-all duration-300"
+              className={`h-12 px-8 rounded-full font-semibold transition-all duration-300 ${unifiedButtonStyle}`}
             >
               Load More
             </Button>
@@ -255,6 +283,8 @@ export default function Gallery() {
         )}
 
       </div>
+
+      <Footer />
 
       {/* Fullscreen Lightbox */}
       {isLightboxOpen && (

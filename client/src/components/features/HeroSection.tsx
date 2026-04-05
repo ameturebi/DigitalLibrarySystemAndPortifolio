@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const slideData = [
   {
@@ -65,12 +66,14 @@ export function HeroSection() {
           </div>
 
           <div className="pt-4 drop-shadow-sm">
-            <Button
-              size="lg"
-              className={`h-14 px-8 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] font-semibold text-lg hover:-translate-y-1 transition-all duration-300 bg-gradient-to-r backdrop-blur-md border border-solid ${slideData[currentSlide].theme}`}
-            >
-              Explore Works
-            </Button>
+            <Link to="/gallery">
+              <Button
+                size="lg"
+                className={`h-14 px-8 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] font-semibold text-lg hover:-translate-y-1 transition-all duration-300 bg-gradient-to-r backdrop-blur-md border border-solid ${slideData[currentSlide].theme}`}
+              >
+                Explore Works
+              </Button>
+            </Link>
           </div>
 
           {/* Dots Navigation */}
