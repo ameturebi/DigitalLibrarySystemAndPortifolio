@@ -20,7 +20,7 @@ export function Navbar() {
   const location = useLocation();
   const links = [
     { name: "Home", path: "/" },
-    { name: "About", path: "/#about" },
+    { name: "About", path: "/about" },
     { name: "Gallery", path: "/gallery" },
     { name: "Books", path: "/#books" }
   ];
@@ -74,6 +74,7 @@ export function Navbar() {
 
       {/* Social Links Container */}
       <motion.div 
+      
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.2 }}
