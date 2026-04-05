@@ -4,7 +4,7 @@ import { Lightbox, type MediaItem } from "../components/ui/Lightbox";
 import { Navbar } from "@/components/layout/Navbar";
 import { SimpleBackground } from "@/components/layout/SimpleBackground";
 import { Footer } from "@/components/layout/Footer";
-import { Button } from "@/components/ui/button";
+import { DynamicButton } from "@/components/ui/DynamicButton";
 import { Play } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 
@@ -273,12 +273,12 @@ export default function Gallery() {
             animate={{ opacity: 1 }}
             className="mt-16 text-center"
           >
-            <Button
+            <DynamicButton
               onClick={handleLoadMore}
-              className={`h-12 px-8 rounded-full font-semibold transition-all duration-300 ${unifiedButtonStyle}`}
+              className="h-12 px-8 rounded-full font-semibold"
             >
               Load More
-            </Button>
+            </DynamicButton>
           </motion.div>
         )}
 
