@@ -5,6 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -64,11 +65,14 @@ export default function AddBookModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px] border-white/20 bg-white/90 backdrop-blur-xl">
+      <DialogContent className="sm:max-w-[500px] border-white/20 bg-white/90 backdrop-blur-xl max-h-[90vh] overflow-y-auto flex flex-col">
         <DialogHeader>
           <DialogTitle className="text-2xl font-serif font-medium">
             {editingBook ? "Edit Book" : "Add New Book"}
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            {editingBook ? "Update the details of your book here." : "Enter the details for your new book here."}
+          </DialogDescription>
         </DialogHeader>
         <div className="grid gap-6 py-4">
           <div className="grid gap-2">
@@ -138,8 +142,11 @@ export default function AddBookModal({
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) {
-                        const url = URL.createObjectURL(file);
-                        setImageUrl(url);
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setImageUrl(reader.result as string);
+                        };
+                        reader.readAsDataURL(file);
                       }
                     }}
                   />
