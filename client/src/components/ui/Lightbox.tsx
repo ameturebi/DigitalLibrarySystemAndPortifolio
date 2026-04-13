@@ -11,6 +11,7 @@ export type MediaItem = {
   description?: string;
   category: string;
   price?: string;
+  isNew?: boolean;
 };
 
 interface LightboxProps {
