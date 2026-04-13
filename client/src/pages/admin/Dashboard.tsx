@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, LogOut, ExternalLink, Edit2, Trash2, Book as BookIcon } from "lucide-react";
+import axios from "axios";
+import { Plus, LogOut, ExternalLink, Edit2, Trash2, Book as BookIcon, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import AddBookModal from "@/components/features/admin/AddBookModal";
@@ -12,39 +13,48 @@ interface Book {
   price: string;
   description: string;
   imageUrl: string;
+  publishDate?: string;
 }
 
-const MOCK_BOOKS: Book[] = [
-  {
-    id: "1",
-    title: "Meditations on Knowledge",
-    price: "24.99",
-    description: "An exploration of early Ethiopian philosophical thought and its modern relevance.",
-    imageUrl: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400",
-  },
-  {
-    id: "2",
-    title: "The Silent Scribe",
-    price: "19.50",
-    description: "A historical narrative documenting the lives of forgotten scholars.",
-    imageUrl: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=400",
-  },
-  {
-    id: "3",
-    title: "Echoes of Eternity",
-    price: "29.99",
-    description: "Poems and dialogues centered around the human experience and spirituality.",
-    imageUrl: "https://images.unsplash.com/photo-1474932430478-367dbb6832c1?auto=format&fit=crop&q=80&w=400",
-  }
-];
-
 export default function Dashboard() {
-  const [books, setBooks] = useState<Book[]>(MOCK_BOOKS);
+  const [books, setBooks] = useState<Book[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingBook, setEditingBook] = useState<Book | null>(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem("adminToken");
+    if (!token) {
+      navigate("/admin");
+      return;
+    }
+    fetchBooks();
+  }, [navigate]);
+
+  const fetchBooks = async () => {
+    try {
+      setIsLoading(true);
+      const res = await axios.get("/api/books");
+      const formattedBooks = res.data.map((b: any) => ({
+        id: b.id,
+        title: b.title,
+        price: b.price,
+        description: b.description,
+        imageUrl: b.image_url,
+        publishDate: b.publish_date
+      }));
+      setBooks(formattedBooks);
+    } catch (err: any) {
+      setErrorMsg("Failed to load books. Please check backend connection.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleLogout = () => {
+    localStorage.removeItem("adminToken");
     navigate("/admin");
   };
 
@@ -58,15 +68,61 @@ export default function Dashboard() {
     setIsModalOpen(true);
   };
 
-  const handleDeleteBook = (id: string) => {
-    setBooks(books.filter(book => book.id !== id));
+  const handleDeleteBook = async (id: string) => {
+    if (!window.confirm("Are you sure you want to permanently delete this book?")) return;
+    try {
+      const token = localStorage.getItem("adminToken");
+      await axios.delete(`/api/books/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setBooks(books.filter(book => book.id !== id));
+    } catch (error) {
+      alert("Error deleting book. Check connection.");
+    }
   };
 
-  const handleSaveBook = (book: Book) => {
-    if (editingBook) {
-      setBooks(books.map(b => (b.id === book.id ? book : b)));
-    } else {
-      setBooks([...books, book]);
+  const handleSaveBook = async (book: Book) => {
+    try {
+      const token = localStorage.getItem("adminToken");
+      const config = { headers: { Authorization: `Bearer ${token}` } };
+      
+      const payload = {
+        title: book.title,
+        price: book.price || 0,
+        description: book.description,
+        image_url: book.imageUrl,
+        publish_date: book.publishDate || null
+      };
+
+      if (editingBook) {
+        // Edit existing book
+        const res = await axios.put(`/api/books/${book.id}`, payload, config);
+        const updated = res.data;
+        setBooks(books.map(b => (b.id === book.id ? {
+          id: updated.id,
+          title: updated.title,
+          price: updated.price,
+          description: updated.description,
+          imageUrl: updated.image_url,
+          publishDate: updated.publish_date
+        } : b)));
+      } else {
+        // Add new book
+        const res = await axios.post(`/api/books`, payload, config);
+        const newBook = res.data;
+        setBooks([{
+          id: newBook.id,
+          title: newBook.title,
+          price: newBook.price,
+          description: newBook.description,
+          imageUrl: newBook.image_url,
+          publishDate: newBook.publish_date
+        }, ...books]);
+      }
+      setIsModalOpen(false);
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || error.message || "Unknown error";
+      alert("Error saving book: " + errorMessage);
     }
   };
 
@@ -114,8 +170,22 @@ export default function Dashboard() {
           </Button>
         </div>
 
-        {/* Books Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {errorMsg && (
+          <div className="mb-8 p-4 bg-red-50 text-red-600 rounded-xl border border-red-100 flex items-center justify-between">
+            <p>{errorMsg}</p>
+            <Button onClick={fetchBooks} variant="outline" size="sm" className="bg-white text-slate-800">Retry</Button>
+          </div>
+        )}
+
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-20">
+            <Loader2 className="h-10 w-10 text-primary animate-spin mb-4" />
+            <p className="text-slate-500">Loading publications from database...</p>
+          </div>
+        ) : (
+          <>
+            {/* Books Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           <AnimatePresence>
             {books.map((book) => (
               <motion.div
@@ -197,6 +267,8 @@ export default function Dashboard() {
               Add Your First Book
             </Button>
           </div>
+        )}
+        </>
         )}
       </main>
 

@@ -5,6 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +18,7 @@ interface Book {
   price: string;
   description: string;
   imageUrl: string;
+  publishDate?: string;
 }
 
 interface AddBookModalProps {
@@ -36,6 +38,7 @@ export default function AddBookModal({
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [publishDate, setPublishDate] = useState("");
 
   useEffect(() => {
     if (editingBook) {
@@ -43,11 +46,13 @@ export default function AddBookModal({
       setPrice(editingBook.price);
       setDescription(editingBook.description);
       setImageUrl(editingBook.imageUrl);
+      setPublishDate(editingBook.publishDate || "");
     } else {
       setTitle("");
       setPrice("");
       setDescription("");
       setImageUrl("");
+      setPublishDate("");
     }
   }, [editingBook, isOpen]);
 
@@ -58,17 +63,21 @@ export default function AddBookModal({
       price,
       description,
       imageUrl,
+      publishDate,
     });
     onClose();
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px] border-white/20 bg-white/90 backdrop-blur-xl">
+      <DialogContent className="sm:max-w-[500px] border-white/20 bg-white/90 backdrop-blur-xl max-h-[90vh] overflow-y-auto flex flex-col">
         <DialogHeader>
           <DialogTitle className="text-2xl font-serif font-medium">
             {editingBook ? "Edit Book" : "Add New Book"}
           </DialogTitle>
+          <DialogDescription className="sr-only">
+            {editingBook ? "Update the details of your book here." : "Enter the details for your new book here."}
+          </DialogDescription>
         </DialogHeader>
         <div className="grid gap-6 py-4">
           <div className="grid gap-2">
@@ -88,6 +97,16 @@ export default function AddBookModal({
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               placeholder="29.99"
+              className="bg-white/50"
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="publishDate">Publish Date</Label>
+            <Input
+              id="publishDate"
+              type="date"
+              value={publishDate}
+              onChange={(e) => setPublishDate(e.target.value)}
               className="bg-white/50"
             />
           </div>
@@ -138,8 +157,11 @@ export default function AddBookModal({
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) {
-                        const url = URL.createObjectURL(file);
-                        setImageUrl(url);
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          setImageUrl(reader.result as string);
+                        };
+                        reader.readAsDataURL(file);
                       }
                     }}
                   />

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import axios from "axios";
 import { AnimatedBackground } from "@/components/layout/AnimatedBackground";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -10,13 +11,26 @@ import { Label } from "@/components/ui/label";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate successful login
-    console.log("Logging in with:", { email, password });
-    navigate("/admin/dashboard");
+    setIsLoading(true);
+    setErrorMsg("");
+    
+    try {
+      const response = await axios.post("/api/auth/login", { email, password });
+      if (response.data.token) {
+        localStorage.setItem("adminToken", response.data.token);
+        navigate("/admin/dashboard");
+      }
+    } catch (error: any) {
+      setErrorMsg(error.response?.data?.message || "Invalid credentials or server error");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -64,12 +78,20 @@ export default function Login() {
                   className="bg-white/50 border-slate-200 focus:border-blue-400 transition-colors"
                 />
               </div>
+              
+              {errorMsg && (
+                <div className="p-3 bg-red-50 text-red-600 text-sm rounded-md border border-red-100 font-medium">
+                  {errorMsg}
+                </div>
+              )}
+
               <Button
                 type="submit"
                 size="lg"
-                className="w-full h-14 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] font-semibold text-lg hover:-translate-y-1 transition-all duration-300 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border-blue-500/30 text-slate-800 hover:bg-blue-50/50 backdrop-blur-md border border-solid"
+                disabled={isLoading}
+                className="w-full h-14 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] font-semibold text-lg hover:-translate-y-1 transition-all duration-300 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border-blue-500/30 text-slate-800 hover:bg-blue-50/50 backdrop-blur-md border border-solid disabled:opacity-50"
               >
-                Login
+                {isLoading ? "Authenticating..." : "Login"}
               </Button>
             </form>
           </CardContent>

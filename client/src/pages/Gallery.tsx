@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { Lightbox, type MediaItem } from "../components/ui/Lightbox";
 import { Navbar } from "@/components/layout/Navbar";
@@ -37,15 +38,6 @@ const initialGalleryItems: MediaItem[] = [
     category: "lectures"
   },
   {
-    id: "4",
-    type: "image",
-    url: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&q=80&w=1600",
-    title: "The Legacy of Thought",
-    description: "A deep exploration of historical and philosophical ideas.",
-    category: "books",
-    price: "$19.99"
-  },
-  {
     id: "5",
     type: "video",
     url: "https://www.youtube.com/embed/FHZ8CAk7jDg?autoplay=1",
@@ -72,30 +64,12 @@ const initialGalleryItems: MediaItem[] = [
     category: "community"
   },
   {
-    id: "8",
-    type: "image",
-    url: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=1600",
-    title: "Modern Ethics",
-    description: "An analysis of morals in today's fast-paced society.",
-    category: "books",
-    price: "$24.99"
-  },
-  {
     id: "9",
     type: "image",
     url: "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&q=80&w=1600",
     title: "Global Forum 2023",
     description: "Panel discussion with international scholars.",
     category: "events"
-  },
-  {
-    id: "10",
-    type: "image",
-    url: "https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?auto=format&fit=crop&q=80&w=1600",
-    title: "Meditations on Tech",
-    description: "How technology bridges the gap between our minds and reality.",
-    category: "books",
-    price: "$21.50"
   },
   {
     id: "11",
@@ -127,17 +101,56 @@ export default function Gallery() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedItem, setSelectedItem] = useState<MediaItem | null>(null);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(6);
+  const [visibleCount, setVisibleCount] = useState(3);
+  
+  // Create state to hold all gallery items including dynamically fetched books
+  const [galleryItems, setGalleryItems] = useState<MediaItem[]>(initialGalleryItems);
+  const [isLoading, setIsLoading] = useState(false);
+  const [fetchError, setFetchError] = useState("");
+
+  useEffect(() => {
+    // Fetch books from backend API
+    const fetchBooks = async () => {
+      try {
+        setIsLoading(true);
+        const res = await axios.get("/api/books");
+        const formattedBooks: MediaItem[] = res.data.map((book: any) => {
+          // Flag as new if created within the last 7 days
+          const isNewRecord = new Date(book.created_at).getTime() > Date.now() - 7 * 24 * 60 * 60 * 1000;
+          return {
+            id: book.id,
+            type: "image",
+            url: book.image_url,
+            title: book.title,
+            description: book.description,
+            category: "books",
+            price: `$${book.price}`,
+            isNew: isNewRecord,
+            publishDate: book.publish_date
+          };
+        });
+        
+        setGalleryItems([...initialGalleryItems, ...formattedBooks]);
+      } catch (err) {
+        console.error("Failed to fetch books", err);
+        setFetchError("Unable to load latest books at this time.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchBooks();
+  }, []);
 
   useEffect(() => {
     if (tabParam && categories.includes(tabParam)) {
       setActiveCategory(tabParam);
-      setVisibleCount(6);
+      setVisibleCount(3);
     }
   }, [tabParam]);
 
   // Filter items based on active category
-  const filteredItems = initialGalleryItems.filter(item => 
+  const filteredItems = galleryItems.filter(item => 
     activeCategory === "All" || item.category === activeCategory.toLowerCase()
   );
 
@@ -191,7 +204,7 @@ export default function Gallery() {
                 key={category}
                 onClick={() => {
                   setActiveCategory(category);
-                  setVisibleCount(6); // Reset visible count on filter change
+                  setVisibleCount(3); // Reset visible count on filter change
                 }}
                 className={`relative px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
                   isActive 
@@ -205,7 +218,16 @@ export default function Gallery() {
           })}
         </div>
 
+        {fetchError && (
+          <div className="text-center text-red-500 mb-8 font-medium">
+            {fetchError}
+          </div>
+        )}
+
         {/* Gallery Grid */}
+        {isLoading && (activeCategory === "Books" || activeCategory === "All") ? (
+          <div className="flex justify-center p-12"><div className="animate-pulse flex items-center justify-center p-8 text-slate-500 bg-white/50 rounded-2xl w-full max-w-sm">Loading library publications from database...</div></div>
+        ) : (
         <motion.div 
           layout
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
@@ -229,6 +251,13 @@ export default function Gallery() {
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
 
+                {/* New Badge */}
+                {item.isNew && (
+                  <div className="absolute top-4 right-4 z-20 px-3 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-[10px] font-bold uppercase tracking-widest rounded-full shadow-lg shadow-blue-500/30">
+                    New
+                  </div>
+                )}
+
                 {/* Dark Overlay on Hover */}
                 <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/70 transition-colors duration-300 z-10 flex flex-col justify-end p-6">
                   
@@ -237,11 +266,18 @@ export default function Gallery() {
                     {item.category === "books" ? (
                       <>
                         <h3 className="text-white text-xl font-medium font-serif leading-tight">{item.title}</h3>
-                        {item.price && (
-                          <span className="inline-block mt-2 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-white text-xs font-semibold tracking-wider">
-                            {item.price}
-                          </span>
-                        )}
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          {item.price && (
+                            <span className="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-white text-xs font-semibold tracking-wider">
+                              {item.price}
+                            </span>
+                          )}
+                          {item.publishDate && (
+                            <span className="inline-block px-3 py-1 bg-blue-500/60 backdrop-blur-md rounded-full text-white text-xs font-semibold tracking-wider">
+                              {new Date(item.publishDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                            </span>
+                          )}
+                        </div>
                         <p className="text-white/80 text-sm line-clamp-2 mt-3 font-light leading-relaxed">{item.description}</p>
                       </>
                     ) : (
@@ -265,6 +301,7 @@ export default function Gallery() {
             ))}
           </AnimatePresence>
         </motion.div>
+        )}
 
         {/* Load More Button */}
         {filteredItems.length > visibleCount && (
