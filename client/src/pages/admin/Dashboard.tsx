@@ -13,6 +13,7 @@ interface Book {
   price: string;
   description: string;
   imageUrl: string;
+  publishDate?: string;
 }
 
 export default function Dashboard() {
@@ -41,7 +42,8 @@ export default function Dashboard() {
         title: b.title,
         price: b.price,
         description: b.description,
-        imageUrl: b.image_url
+        imageUrl: b.image_url,
+        publishDate: b.publish_date
       }));
       setBooks(formattedBooks);
     } catch (err: any) {
@@ -88,7 +90,8 @@ export default function Dashboard() {
         title: book.title,
         price: book.price || 0,
         description: book.description,
-        image_url: book.imageUrl
+        image_url: book.imageUrl,
+        publish_date: book.publishDate || null
       };
 
       if (editingBook) {
@@ -100,7 +103,8 @@ export default function Dashboard() {
           title: updated.title,
           price: updated.price,
           description: updated.description,
-          imageUrl: updated.image_url
+          imageUrl: updated.image_url,
+          publishDate: updated.publish_date
         } : b)));
       } else {
         // Add new book
@@ -111,7 +115,8 @@ export default function Dashboard() {
           title: newBook.title,
           price: newBook.price,
           description: newBook.description,
-          imageUrl: newBook.image_url
+          imageUrl: newBook.image_url,
+          publishDate: newBook.publish_date
         }, ...books]);
       }
       setIsModalOpen(false);

@@ -125,7 +125,8 @@ export default function Gallery() {
             description: book.description,
             category: "books",
             price: `$${book.price}`,
-            isNew: isNewRecord
+            isNew: isNewRecord,
+            publishDate: book.publish_date
           };
         });
         
@@ -265,11 +266,18 @@ export default function Gallery() {
                     {item.category === "books" ? (
                       <>
                         <h3 className="text-white text-xl font-medium font-serif leading-tight">{item.title}</h3>
-                        {item.price && (
-                          <span className="inline-block mt-2 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-white text-xs font-semibold tracking-wider">
-                            {item.price}
-                          </span>
-                        )}
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          {item.price && (
+                            <span className="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-white text-xs font-semibold tracking-wider">
+                              {item.price}
+                            </span>
+                          )}
+                          {item.publishDate && (
+                            <span className="inline-block px-3 py-1 bg-blue-500/60 backdrop-blur-md rounded-full text-white text-xs font-semibold tracking-wider">
+                              {new Date(item.publishDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                            </span>
+                          )}
+                        </div>
                         <p className="text-white/80 text-sm line-clamp-2 mt-3 font-light leading-relaxed">{item.description}</p>
                       </>
                     ) : (

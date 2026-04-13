@@ -12,6 +12,7 @@ export type MediaItem = {
   category: string;
   price?: string;
   isNew?: boolean;
+  publishDate?: string;
 };
 
 interface LightboxProps {
@@ -117,6 +118,11 @@ export function Lightbox({ item, isOpen, onClose }: LightboxProps) {
               className="mt-6 text-center max-w-2xl px-4"
             >
               <h3 className="text-2xl font-serif text-white mb-2 tracking-wide">{item.title}</h3>
+              {item.publishDate && (
+                <div className="text-blue-300 text-sm font-medium mb-3 tracking-widest uppercase">
+                  Published: {new Date(item.publishDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                </div>
+              )}
               {item.description && (
                 <p className="text-gray-300 text-sm md:text-base font-light leading-relaxed">
                   {item.description}

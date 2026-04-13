@@ -18,6 +18,7 @@ interface Book {
   price: string;
   description: string;
   imageUrl: string;
+  publishDate?: string;
 }
 
 interface AddBookModalProps {
@@ -37,6 +38,7 @@ export default function AddBookModal({
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [publishDate, setPublishDate] = useState("");
 
   useEffect(() => {
     if (editingBook) {
@@ -44,11 +46,13 @@ export default function AddBookModal({
       setPrice(editingBook.price);
       setDescription(editingBook.description);
       setImageUrl(editingBook.imageUrl);
+      setPublishDate(editingBook.publishDate || "");
     } else {
       setTitle("");
       setPrice("");
       setDescription("");
       setImageUrl("");
+      setPublishDate("");
     }
   }, [editingBook, isOpen]);
 
@@ -59,6 +63,7 @@ export default function AddBookModal({
       price,
       description,
       imageUrl,
+      publishDate,
     });
     onClose();
   };
@@ -92,6 +97,16 @@ export default function AddBookModal({
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               placeholder="29.99"
+              className="bg-white/50"
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="publishDate">Publish Date</Label>
+            <Input
+              id="publishDate"
+              type="date"
+              value={publishDate}
+              onChange={(e) => setPublishDate(e.target.value)}
               className="bg-white/50"
             />
           </div>
