@@ -17,12 +17,12 @@ const getBooks = async (req, res) => {
 
 // @desc    Create a new book - (INSERT)
 const createBook = async (req, res) => {
-  const { title, description, price, image_url } = req.body;
+  const { title, description, price, image_url, publish_date } = req.body;
   
   try {
-    const { data, error } = await supabase
+    const { data, error } = await req.supabaseClient
       .from('books')
-      .insert([{ title, description, price, image_url }])
+      .insert([{ title, description, price, image_url, publish_date }])
       .select(); 
       
     if (error) throw error;
@@ -35,12 +35,12 @@ const createBook = async (req, res) => {
 // @desc    Update a book - (UPDATE)
 const updateBook = async (req, res) => {
   const { id } = req.params;
-  const { title, description, price, image_url } = req.body;
+  const { title, description, price, image_url, publish_date } = req.body;
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await req.supabaseClient
       .from('books')
-      .update({ title, description, price, image_url })
+      .update({ title, description, price, image_url, publish_date })
       .eq('id', id)
       .select();
 
@@ -58,7 +58,7 @@ const deleteBook = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await req.supabaseClient
       .from('books')
       .delete()
       .eq('id', id)
