@@ -101,7 +101,7 @@ export default function Gallery() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedItem, setSelectedItem] = useState<MediaItem | null>(null);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(6);
+  const [visibleCount, setVisibleCount] = useState(3);
   
   // Create state to hold all gallery items including dynamically fetched books
   const [galleryItems, setGalleryItems] = useState<MediaItem[]>(initialGalleryItems);
@@ -114,15 +114,20 @@ export default function Gallery() {
       try {
         setIsLoading(true);
         const res = await axios.get("/api/books");
-        const formattedBooks: MediaItem[] = res.data.map((book: any) => ({
-          id: book.id,
-          type: "image",
-          url: book.image_url,
-          title: book.title,
-          description: book.description,
-          category: "books",
-          price: `$${book.price}`
-        }));
+        const formattedBooks: MediaItem[] = res.data.map((book: any) => {
+          // Flag as new if created within the last 7 days
+          const isNewRecord = new Date(book.created_at).getTime() > Date.now() - 7 * 24 * 60 * 60 * 1000;
+          return {
+            id: book.id,
+            type: "image",
+            url: book.image_url,
+            title: book.title,
+            description: book.description,
+            category: "books",
+            price: `$${book.price}`,
+            isNew: isNewRecord
+          };
+        });
         
         setGalleryItems([...initialGalleryItems, ...formattedBooks]);
       } catch (err) {
@@ -139,7 +144,7 @@ export default function Gallery() {
   useEffect(() => {
     if (tabParam && categories.includes(tabParam)) {
       setActiveCategory(tabParam);
-      setVisibleCount(6);
+      setVisibleCount(3);
     }
   }, [tabParam]);
 
@@ -198,7 +203,7 @@ export default function Gallery() {
                 key={category}
                 onClick={() => {
                   setActiveCategory(category);
-                  setVisibleCount(6); // Reset visible count on filter change
+                  setVisibleCount(3); // Reset visible count on filter change
                 }}
                 className={`relative px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
                   isActive 
@@ -244,6 +249,13 @@ export default function Gallery() {
                   alt={item.title}
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
+
+                {/* New Badge */}
+                {item.isNew && (
+                  <div className="absolute top-4 right-4 z-20 px-3 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-[10px] font-bold uppercase tracking-widest rounded-full shadow-lg shadow-blue-500/30">
+                    New
+                  </div>
+                )}
 
                 {/* Dark Overlay on Hover */}
                 <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/70 transition-colors duration-300 z-10 flex flex-col justify-end p-6">
