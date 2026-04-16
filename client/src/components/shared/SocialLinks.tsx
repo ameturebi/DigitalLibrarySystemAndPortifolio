@@ -12,12 +12,21 @@ const FacebookIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const YoutubeIcon = ({ className }: { className?: string }) => (
+  <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+  </svg>
+);
+
 export function SocialLinks({ size = "md" }: { size?: "sm" | "md" }) {
   const btnClass = size === "sm" ? "w-10 h-10" : "w-12 h-12";
   const iconClass = size === "sm" ? "w-4 h-4" : "w-5 h-5";
 
   return (
     <div className="flex items-center space-x-3">
+      <a href="https://www.youtube.com/@burrhanadis" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className={`${btnClass} rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:text-white transition-all duration-300 hover:bg-[#FF0000] hover:shadow-[0_4px_14px_0_rgba(255,0,0,0.39)] transform hover:-translate-y-1`}>
+        <YoutubeIcon className={iconClass} />
+      </a>
       <a href="#" aria-label="LinkedIn" className={`${btnClass} rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:text-white transition-all duration-300 hover:bg-[#0A66C2] hover:shadow-[0_4px_14px_0_rgba(10,102,194,0.39)] transform hover:-translate-y-1`}>
         <LinkedinIcon className={iconClass} />
       </a>
