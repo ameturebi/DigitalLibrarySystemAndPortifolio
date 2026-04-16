@@ -1,5 +1,10 @@
 
-import { motion, type Variants } from "framer-motion";
+import { motion, type Variants, useMotionValue, useTransform, useSpring } from "framer-motion";
+import book1 from "@/assets/book-1.png";
+import book2 from "@/assets/book-2.png";
+import book3 from "@/assets/book-3.png";
+import book4 from "@/assets/book-4.png";
+
 import { Navbar } from "@/components/layout/Navbar";
 import { SimpleBackground } from "@/components/layout/SimpleBackground";
 import { Footer } from "@/components/layout/Footer";
@@ -38,6 +43,74 @@ const staggerContainer: Variants = {
     },
   },
 };
+
+interface BookProps {
+  src: string;
+  rotation: number;
+  x: number;
+  y: number;
+  zIndex: number;
+  delay: number;
+}
+
+function BookCard({ src, rotation, x, y, zIndex, delay }: BookProps) {
+  const xVal = useMotionValue(0);
+  const yVal = useMotionValue(0);
+
+  const rotateX = useTransform(yVal, [-100, 100], [10, -10]);
+  const rotateY = useTransform(xVal, [-100, 100], [-10, 10]);
+
+  const springConfig = { damping: 25, stiffness: 400 };
+  const springRotateX = useSpring(rotateX, springConfig);
+  const springRotateY = useSpring(rotateY, springConfig);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8, x: x * 2, y: y * 2, rotateZ: rotation }}
+      whileInView={{ opacity: 1, scale: 1, x: x, y: y, rotateZ: rotation }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, delay, ease: "easeOut" }}
+      style={{
+        zIndex: zIndex,
+        rotateX: springRotateX,
+        rotateY: springRotateY,
+        perspective: 1200,
+        transformStyle: "preserve-3d"
+      }}
+      onMouseMove={(e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        xVal.set(e.clientX - rect.left - rect.width / 2);
+        yVal.set(e.clientY - rect.top - rect.height / 2);
+      }}
+      onMouseLeave={() => {
+        xVal.set(0);
+        yVal.set(0);
+      }}
+      whileHover={{ scale: 1.1, zIndex: 100, transition: { duration: 0.2 } }}
+      className="absolute w-40 md:w-56 aspect-[3/4.2] cursor-pointer"
+    >
+      <div className="relative w-full h-full shadow-[0_20px_50px_rgba(0,0,0,0.3)] rounded-l-sm rounded-r-md overflow-hidden group">
+        {/* Book Spine Depth */}
+        <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-white/20 z-20" />
+        <div className="absolute left-[3px] top-0 bottom-0 w-[10px] bg-black/20 z-10" />
+        
+        <img 
+          src={src} 
+          alt="Book cover" 
+          className="w-full h-full object-cover transition-transform duration-500" 
+        />
+        
+        {/* Paper Texture Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-transparent opacity-40 mix-blend-multiply" />
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/paper.png')] opacity-10 mix-blend-overlay" />
+        
+        {/* Shine effect on hover */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out" />
+      </div>
+    </motion.div>
+  );
+}
+
 
 export default function About() {
   return (
@@ -82,9 +155,9 @@ export default function About() {
           >
             <div className="absolute inset-0 bg-amber-200/50 rounded-2xl transform translate-x-4 translate-y-4 -z-10"></div>
             <img 
-              src="https://images.unsplash.com/photo-1725452119240-cafe017c8832?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-              alt="Mohammed Ali Burhan holding a book" 
-              className="w-full h-auto max-h-[600px] object-cover rounded-2xl shadow-xl grayscale-[20%] hover:grayscale-0 transition-all duration-700"
+              src="https://i.ytimg.com/vi/Sj1lqH7GQIU/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCYlypCi3eDV5IfrbZ6I7kD9atHbA" 
+              alt="Mohammed Ali Burhan" 
+              className="w-full h-auto max-h-[600px] object-cover rounded-2xl shadow-xl transition-all duration-700"
             />
           </motion.div>
         </div>
@@ -107,19 +180,32 @@ export default function About() {
           <div className="space-y-24">
             {/* Timeline Item 1 */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-              <motion.div 
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-                variants={slideInLeft}
-                className="order-2 md:order-1"
+              <div 
+                className="relative order-2 md:order-1 h-[450px] md:h-[600px] flex items-center justify-center"
               >
-                <img 
-                  src="https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=1000&auto=format&fit=crop" 
-                  alt="Early Life" 
-                  className="rounded-2xl shadow-lg w-full h-80 object-cover"
-                />
-              </motion.div>
+                {/* Book Stack Container */}
+                <div className="relative w-full h-full flex items-center justify-center">
+                  <BookCard src={book1} rotation={-5} x={-30} y={-80} zIndex={10} delay={0.1} />
+                  <BookCard src={book2} rotation={4} x={45} y={-30} zIndex={20} delay={0.2} />
+                  <BookCard src={book3} rotation={-8} x={-40} y={40} zIndex={30} delay={0.3} />
+                  <BookCard src={book4} rotation={12} x={60} y={80} zIndex={40} delay={0.4} />
+                  
+                  {/* Decorative Elements */}
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.8 }}
+                    className="absolute -bottom-10 -left-10 w-32 h-32 bg-amber-200/20 rounded-full blur-3xl -z-10"
+                  />
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 1 }}
+                    className="absolute -top-10 -right-10 w-40 h-40 bg-blue-200/20 rounded-full blur-3xl -z-10"
+                  />
+                </div>
+              </div>
+
               <motion.div 
                 initial="hidden"
                 whileInView="visible"

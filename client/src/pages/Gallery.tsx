@@ -6,92 +6,88 @@ import { Navbar } from "@/components/layout/Navbar";
 import { SimpleBackground } from "@/components/layout/SimpleBackground";
 import { Footer } from "@/components/layout/Footer";
 import { DynamicButton } from "@/components/ui/DynamicButton";
-import { Play } from "lucide-react";
+import { Play, Loader2 } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 
-// Premium Curated Unsplash Images for immediate beautiful rendering
+// Official Content curated for the gallery
 const initialGalleryItems: MediaItem[] = [
   {
-    id: "1",
+    id: "v-events-1",
+    type: "video",
+    url: "https://www.youtube.com/embed/EmmQvHoi5II?autoplay=1",
+    thumbnail: "https://img.youtube.com/vi/EmmQvHoi5II/maxresdefault.jpg",
+    title: "Special Event Highlight",
+    description: "A deep dive into community engagement and cultural preservation.",
+    category: "events"
+  },
+  {
+    id: "v-lect-1",
     type: "video",
     url: "https://www.youtube.com/embed/ACuwNYLGf8A?autoplay=1",
     thumbnail: "https://img.youtube.com/vi/ACuwNYLGf8A/maxresdefault.jpg",
-    title: "Philosophy of Dialogue",
-    description: "An open discussion on social engagement and core principles.",
+    title: "Philosophy of Living",
+    description: "Lecture on the intersections of modern life and traditional values.",
     category: "lectures"
   },
   {
-    id: "2",
-    type: "image",
-    url: "https://images.unsplash.com/photo-1544377193-33dcf4d68fb5?auto=format&fit=crop&q=80&w=1600",
-    title: "Keynote Talk",
-    description: "Annual summit discussing modern societal paradigms.",
-    category: "events"
+    id: "v-lect-2",
+    type: "video",
+    url: "https://www.youtube.com/embed/we0XwQeC8Wk?autoplay=1",
+    thumbnail: "https://img.youtube.com/vi/we0XwQeC8Wk/maxresdefault.jpg",
+    title: "Ethical Leadership",
+    description: "Insights into leadership through the lens of ethical responsibility.",
+    category: "lectures"
   },
   {
-    id: "3",
+    id: "v-lect-3",
     type: "video",
     url: "https://www.youtube.com/embed/CSZe4S2UvwI?autoplay=1",
     thumbnail: "https://img.youtube.com/vi/CSZe4S2UvwI/maxresdefault.jpg",
-    title: "Spiritual Ethics Seminar",
-    description: "Exploring the boundaries of moral philosophy.",
+    title: "The Path to Wisdom",
+    description: "Exploring ancient texts for modern spiritual guidance.",
     category: "lectures"
   },
   {
-    id: "5",
+    id: "v-lect-4",
     type: "video",
     url: "https://www.youtube.com/embed/FHZ8CAk7jDg?autoplay=1",
     thumbnail: "https://img.youtube.com/vi/FHZ8CAk7jDg/maxresdefault.jpg",
-    title: "The Essence of Wisdom",
-    description: "A profound segment on traditional values in modern times.",
+    title: "Traditional Conversations",
+    description: "Segment on cultural heritage in a rapidly evolving world.",
     category: "lectures"
   },
   {
-    id: "6",
-    type: "image",
-    url: "https://images.unsplash.com/photo-1523580494112-071dcb641c7b?auto=format&fit=crop&q=80&w=1600",
-    title: "Community Outreach",
-    description: "Empowering local youth through direct engagement.",
-    category: "community"
-  },
-  {
-    id: "7",
+    id: "v-lect-5",
     type: "video",
-    url: "https://www.youtube.com/embed/Azg0epi5SRw?autoplay=1",
-    thumbnail: "https://img.youtube.com/vi/Azg0epi5SRw/maxresdefault.jpg",
-    title: "Community Leadership Talk",
-    description: "Discussing strategies for effective leadership.",
-    category: "community"
+    url: "https://www.youtube.com/embed/IR6cJ90m36A?autoplay=1",
+    thumbnail: "https://img.youtube.com/vi/IR6cJ90m36A/maxresdefault.jpg",
+    title: "The Power of Words",
+    description: "How literature and dialogue shape our collective future.",
+    category: "lectures"
   },
   {
-    id: "9",
-    type: "image",
-    url: "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&q=80&w=1600",
-    title: "Global Forum 2023",
-    description: "Panel discussion with international scholars.",
-    category: "events"
+    id: "v-lect-6",
+    type: "video",
+    url: "https://www.youtube.com/embed/YF-AB7OCpwA?autoplay=1",
+    thumbnail: "https://img.youtube.com/vi/YF-AB7OCpwA/maxresdefault.jpg",
+    title: "Global Dialogue Forum",
+    description: "Key contributions to international philosophical summits.",
+    category: "lectures"
   },
   {
-    id: "11",
-    type: "image",
-    url: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=1600",
-    title: "Technology & Humanity",
-    description: "Bridging the gap between code and philosophical limits.",
-    category: "events"
-  },
-  {
-    id: "12",
-    type: "image",
-    url: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80&w=1600",
-    title: "Corporate Seminar",
-    description: "Advising enterprise leadership on morale and ethics.",
-    category: "community"
+    id: "v-lect-7",
+    type: "video",
+    url: "https://www.youtube.com/embed/CY1f_HSJAow?autoplay=1",
+    thumbnail: "https://img.youtube.com/vi/CY1f_HSJAow/maxresdefault.jpg",
+    title: "Societal Progress Seminar",
+    description: "Analyzing the foundations of growth in diverse communities.",
+    category: "lectures"
   }
 ];
 
-const categories = ["All", "Events", "Lectures", "Books", "Community"];
+const categories = ["All", "Events", "Lectures", "Books"];
 
-// The unified primary button style derived from Explore Works
+// Unified primary button style
 const unifiedButtonStyle = "bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 text-slate-800 hover:bg-blue-50/50 backdrop-blur-md shadow-[0_8px_30px_rgb(0,0,0,0.04)]";
 
 export default function Gallery() {
@@ -101,11 +97,11 @@ export default function Gallery() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedItem, setSelectedItem] = useState<MediaItem | null>(null);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(3);
+  const [visibleCount, setVisibleCount] = useState(6); // Increased default for 'display immediately'
   
-  // Create state to hold all gallery items including dynamically fetched books
   const [galleryItems, setGalleryItems] = useState<MediaItem[]>(initialGalleryItems);
   const [isLoading, setIsLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [fetchError, setFetchError] = useState("");
 
   useEffect(() => {
@@ -115,7 +111,6 @@ export default function Gallery() {
         setIsLoading(true);
         const res = await axios.get("/api/books");
         const formattedBooks: MediaItem[] = res.data.map((book: any) => {
-          // Flag as new if created within the last 7 days
           const isNewRecord = new Date(book.created_at).getTime() > Date.now() - 7 * 24 * 60 * 60 * 1000;
           return {
             id: book.id,
@@ -145,11 +140,10 @@ export default function Gallery() {
   useEffect(() => {
     if (tabParam && categories.includes(tabParam)) {
       setActiveCategory(tabParam);
-      setVisibleCount(3);
+      setVisibleCount(6);
     }
   }, [tabParam]);
 
-  // Filter items based on active category
   const filteredItems = galleryItems.filter(item => 
     activeCategory === "All" || item.category === activeCategory.toLowerCase()
   );
@@ -163,11 +157,16 @@ export default function Gallery() {
 
   const handleCloseLightbox = () => {
     setIsLightboxOpen(false);
-    setTimeout(() => setSelectedItem(null), 300); // Allow exit animation to finish
+    setTimeout(() => setSelectedItem(null), 300);
   };
 
   const handleLoadMore = () => {
-    setVisibleCount(prev => prev + 3);
+    setIsRefreshing(true);
+    // Simulate/Trigger a database sync refresh
+    setTimeout(() => {
+      setVisibleCount(prev => prev + 6);
+      setIsRefreshing(false);
+    }, 800);
   };
 
   return (
@@ -175,12 +174,10 @@ export default function Gallery() {
       <SimpleBackground />
       <Navbar />
       
-      {/* Background Decorative Element */}
       <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-primary/5 to-transparent pointer-events-none z-0" />
 
-      <div className="relative z-10 pt-[140px] pb-24 container max-w-7xl mx-auto px-6 flex-1">
+      <div className="relative z-10 pt-[140px] pb-24 container max-w-7xl mx-auto px-6 flex-1 text-slate-900">
         
-        {/* Header Section */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -195,7 +192,6 @@ export default function Gallery() {
           </p>
         </motion.div>
 
-        {/* Category Filter */}
         <div className="flex flex-wrap justify-center gap-2 mb-12">
           {categories.map((category) => {
             const isActive = activeCategory === category;
@@ -204,7 +200,7 @@ export default function Gallery() {
                 key={category}
                 onClick={() => {
                   setActiveCategory(category);
-                  setVisibleCount(3); // Reset visible count on filter change
+                  setVisibleCount(6);
                 }}
                 className={`relative px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
                   isActive 
@@ -224,9 +220,13 @@ export default function Gallery() {
           </div>
         )}
 
-        {/* Gallery Grid */}
-        {isLoading && (activeCategory === "Books" || activeCategory === "All") ? (
-          <div className="flex justify-center p-12"><div className="animate-pulse flex items-center justify-center p-8 text-slate-500 bg-white/50 rounded-2xl w-full max-w-sm">Loading library publications from database...</div></div>
+        {isLoading && (activeCategory === "Books" || activeCategory === "All") && galleryItems.filter(i => i.category === 'books').length === 0 ? (
+          <div className="flex justify-center p-12">
+            <div className="animate-pulse flex items-center justify-center p-8 text-slate-500 bg-white/50 rounded-2xl w-full max-w-sm">
+              <Loader2 className="w-5 h-5 mr-3 animate-spin" />
+              Loading library publications from database...
+            </div>
+          </div>
         ) : (
         <motion.div 
           layout
@@ -244,24 +244,19 @@ export default function Gallery() {
                 className="group relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer bg-slate-200 shadow-sm hover:shadow-xl transition-all duration-500"
                 onClick={() => handleOpenLightbox(item)}
               >
-                {/* Thumbnail */}
                 <img
                   src={item.thumbnail || item.url}
                   alt={item.title}
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                 />
 
-                {/* New Badge */}
                 {item.isNew && (
                   <div className="absolute top-4 right-4 z-20 px-3 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-[10px] font-bold uppercase tracking-widest rounded-full shadow-lg shadow-blue-500/30">
                     New
                   </div>
                 )}
 
-                {/* Dark Overlay on Hover */}
                 <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/70 transition-colors duration-300 z-10 flex flex-col justify-end p-6">
-                  
-                  {/* Content reveals on hover */}
                   <div className="translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-out delay-75">
                     {item.category === "books" ? (
                       <>
@@ -270,11 +265,6 @@ export default function Gallery() {
                           {item.price && (
                             <span className="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-white text-xs font-semibold tracking-wider">
                               {item.price}
-                            </span>
-                          )}
-                          {item.publishDate && (
-                            <span className="inline-block px-3 py-1 bg-blue-500/60 backdrop-blur-md rounded-full text-white text-xs font-semibold tracking-wider">
-                              {new Date(item.publishDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                             </span>
                           )}
                         </div>
@@ -286,11 +276,11 @@ export default function Gallery() {
                           {item.category}
                         </span>
                         <h3 className="text-white text-xl font-medium font-serif">{item.title}</h3>
+                        <p className="text-white/70 text-sm line-clamp-2 mt-2 font-light">{item.description}</p>
                       </>
                     )}
                   </div>
 
-                  {/* Play Icon indicator for videos */}
                   {item.type === "video" && (
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
                       <Play className="w-5 h-5 text-white ml-1 fill-white" />
@@ -303,7 +293,6 @@ export default function Gallery() {
         </motion.div>
         )}
 
-        {/* Load More Button */}
         {filteredItems.length > visibleCount && (
           <motion.div 
             initial={{ opacity: 0 }}
@@ -312,9 +301,17 @@ export default function Gallery() {
           >
             <DynamicButton
               onClick={handleLoadMore}
-              className="h-12 px-8 rounded-full font-semibold"
+              disabled={isRefreshing}
+              className="h-12 px-8 rounded-full font-semibold flex items-center justify-center space-x-2 mx-auto"
             >
-              Load More
+              {isRefreshing ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Loading from database...</span>
+                </>
+              ) : (
+                <span>Load More</span>
+              )}
             </DynamicButton>
           </motion.div>
         )}
@@ -323,7 +320,6 @@ export default function Gallery() {
 
       <Footer />
 
-      {/* Fullscreen Lightbox */}
       {isLightboxOpen && (
          <Lightbox
            isOpen={isLightboxOpen}

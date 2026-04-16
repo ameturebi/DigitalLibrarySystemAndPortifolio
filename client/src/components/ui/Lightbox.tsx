@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Play } from "lucide-react";
+import { X, Play, ExternalLink } from "lucide-react";
 import { useEffect } from "react";
 
 export type MediaItem = {
@@ -124,9 +124,21 @@ export function Lightbox({ item, isOpen, onClose }: LightboxProps) {
                 </div>
               )}
               {item.description && (
-                <p className="text-gray-300 text-sm md:text-base font-light leading-relaxed">
+                <p className="text-gray-300 text-sm md:text-base font-light leading-relaxed mb-6">
                   {item.description}
                 </p>
+              )}
+
+              {item.type === "video" && (
+                <a 
+                  href={item.url.replace("embed/", "watch?v=").split("?")[0]} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center space-x-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-full transition-all duration-300 shadow-lg shadow-red-900/20 font-medium group"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  <span>Watch on YouTube</span>
+                </a>
               )}
             </motion.div>
           </motion.div>
