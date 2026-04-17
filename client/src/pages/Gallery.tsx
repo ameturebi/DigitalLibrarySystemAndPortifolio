@@ -8,6 +8,7 @@ import { Footer } from "@/components/layout/Footer";
 import { DynamicButton } from "@/components/ui/DynamicButton";
 import { Play, Loader2 } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
+import SEO from "@/components/utils/SEO";
 
 // Official Content curated for the gallery
 const initialGalleryItems: MediaItem[] = [
@@ -171,6 +172,10 @@ export default function Gallery() {
 
   return (
     <main className="min-h-screen bg-transparent font-sans antialiased text-slate-900 relative flex flex-col">
+      <SEO 
+        title="Gallery & Literary Works | Muhammed Ali Burhan"
+        description="Explore the visual and literary gallery of Muhammed Ali Burhan, including events, lectures, and published books."
+      />
       <SimpleBackground />
       <Navbar />
       

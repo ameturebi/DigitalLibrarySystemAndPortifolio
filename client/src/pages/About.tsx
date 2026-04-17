@@ -18,6 +18,7 @@ import {
   ArrowRight,
   Sparkles
 } from "lucide-react";
+import SEO from "@/components/utils/SEO";
 
 const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -115,6 +116,11 @@ function BookCard({ src, rotation, x, y, zIndex, delay }: BookProps) {
 export default function About() {
   return (
     <main className="min-h-screen font-sans antialiased text-slate-900 relative flex flex-col bg-slate-50">
+      <SEO 
+        title="About Muhammed Ali Burhan | Author & Educator"
+        description="Learn about the journey, experiences, and achievements of Muhammed Ali Burhan. A life dedicated to knowledge, writing, and community."
+        type="profile"
+      />
       <SimpleBackground />
       <Navbar />
       

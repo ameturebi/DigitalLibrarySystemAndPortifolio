@@ -4,10 +4,15 @@ import { AnimatedBackground } from "@/components/layout/AnimatedBackground";
 import { Footer } from "@/components/layout/Footer";
 import { Link } from "react-router-dom";
 import { DynamicButton } from "@/components/ui/DynamicButton";
+import SEO from "@/components/utils/SEO";
 
 export default function Home() {
   return (
     <main className="w-full h-screen font-sans antialiased text-slate-900 relative bg-transparent overflow-y-auto overflow-x-hidden snap-y snap-mandatory scroll-smooth">
+      <SEO 
+        title="Muhammed Ali Burhan - Author Portfolio & Library System"
+        description="Welcome to the digital portfolio and library of Muhammed Ali Burhan. Explore a curated collection of literary works."
+      />
       
       {/* 
         CRITICAL BACKGROUND RENDER 
