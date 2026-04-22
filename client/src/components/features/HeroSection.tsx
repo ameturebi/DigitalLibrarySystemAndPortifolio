@@ -2,26 +2,28 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const slideData = [
   {
     image: "/src/assets/hero-1.png",
-    subtitle: "Ethiopian Philosopher & Author",
+    subtitleKey: "hero.slide1",
     theme: "from-blue-500/20 to-purple-500/20 border-blue-500/30 text-slate-800 hover:bg-blue-50/50",
   },
   {
     image: "/src/assets/hero-2.png",
-    subtitle: "Passionate Speaker & Thought Leader",
+    subtitleKey: "hero.slide2",
     theme: "from-purple-500/20 to-pink-500/20 border-purple-500/30 text-slate-800 hover:bg-purple-50/50",
   },
   {
     image: "/src/assets/hero-3.png",
-    subtitle: "Extensive Digital Archive",
+    subtitleKey: "hero.slide3",
     theme: "from-cyan-500/20 to-blue-500/20 border-cyan-500/30 text-slate-800 hover:bg-cyan-50/50",
   }
 ];
 
 export function HeroSection() {
+  const { t } = useTranslation();
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
@@ -45,8 +47,8 @@ export function HeroSection() {
           transition={{ duration: 0.6 }}
         >
           <h1 className="text-4xl md:text-6xl lg:text-[4.5rem] font-medium text-slate-900 leading-[1.1] tracking-tight">
-            Mohammed Ali <br className="hidden md:block" />
-            <span className="font-serif italic font-light text-slate-700">(Burhan)</span>
+            {t('hero.title')} <br className="hidden md:block" />
+            <span className="font-serif italic font-light text-slate-700">{t('hero.subtitle_name')}</span>
           </h1>
 
           {/* Dynamic Subtitle Component */}
@@ -60,7 +62,7 @@ export function HeroSection() {
                 transition={{ duration: 0.4 }}
                 className="text-lg md:text-xl text-primary font-medium absolute"
               >
-                {slideData[currentSlide].subtitle}
+                {t(slideData[currentSlide].subtitleKey)}
               </motion.p>
             </AnimatePresence>
           </div>
@@ -71,7 +73,7 @@ export function HeroSection() {
                 size="lg"
                 className={`h-14 px-8 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] font-semibold text-lg hover:-translate-y-1 transition-all duration-300 bg-gradient-to-r backdrop-blur-md border border-solid ${slideData[currentSlide].theme}`}
               >
-                Explore Works
+                {t('hero.exploreBtn')}
               </Button>
             </Link>
           </div>

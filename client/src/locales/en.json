@@ -1,0 +1,81 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "gallery": "Gallery",
+    "books": "Books"
+  },
+  "home": {
+    "seoTitle": "Muhammed Ali Burhan - Author Portfolio & Library System",
+    "seoDesc": "Welcome to the digital portfolio and library of Muhammed Ali Burhan. Explore a curated collection of literary works.",
+    "aboutTitle": "Author & Educator",
+    "aboutPreview": "A life dedicated to knowledge, writing, and community. Discover the journey from early curiosity to a lifelong commitment to literature.",
+    "aboutBtn": "Learn More About Me",
+    "galleryTitle": "Featured Works",
+    "galleryPreview": "A curated selection of thoughts, dialogues, and historical texts.",
+    "galleryBtn": "Enter Full Gallery"
+  },
+  "hero": {
+    "title": "Mohammed Ali",
+    "subtitle_name": "(Burhan)",
+    "slide1": "Ethiopian Philosopher & Author",
+    "slide2": "Passionate Speaker & Thought Leader",
+    "slide3": "Extensive Digital Archive",
+    "exploreBtn": "Explore Works"
+  },
+  "gallery": {
+    "seoTitle": "Gallery & Literary Works | Muhammed Ali Burhan",
+    "seoDesc": "Explore the visual and literary gallery of Muhammed Ali Burhan, including events, lectures, and published books.",
+    "title": "Gallery",
+    "subtitle": "Moments, events, and contributions of Mohammed Ali Burhan",
+    "categories": {
+      "All": "All",
+      "Events": "Events",
+      "Lectures": "Lectures",
+      "Books": "Books"
+    },
+    "fetchError": "Unable to load latest books at this time.",
+    "loadingBooks": "Loading library publications from database...",
+    "newBadge": "New",
+    "loadingMore": "Loading from database...",
+    "loadMore": "Load More"
+  },
+  "footer": {
+    "desc": "Bridging the ancient wisdom of ethical philosophy with the dynamics of modern society. Actively engaging in literature, dialogue, and community outreach.",
+    "location": "Addis Ababa, Ethiopia",
+    "connect": "Connect",
+    "copyright": "© {{year}} Mohammed Ali Burhan. All rights reserved."
+  },
+  "about": {
+    "seoTitle": "About Muhammed Ali Burhan | Author & Educator",
+    "seoDesc": "Learn about the journey, experiences, and achievements of Muhammed Ali Burhan. A life dedicated to knowledge, writing, and community.",
+    "heroTitle": "Author & Educator",
+    "heroDesc1": "A life dedicated to knowledge, writing, and community.",
+    "heroDesc2": "Through decades of diverse experiences and a relentless pursuit of understanding, my journey has been shaped by the power of words to inspire, educate, and transform.",
+    "journeyTitle": "The Journey",
+    "journeySubtitle": "Tracing the steps from early curiosity to a lifelong commitment to literature.",
+    "rootsTitle": "Early Roots",
+    "rootsDesc": "Growing up surrounded by profound texts and diverse cultures, my early life was a tapestry of endless questions. It was in the quiet corners of local libraries that I discovered my passion for storytelling and truth.",
+    "academicTitle": "Academic Pursuits",
+    "academicDesc": "Formal education provided the structural foundation for my thoughts. Delving deep into historical analysis and philosophical literature, I honed my ability to translate complex ideas into accessible narratives.",
+    "writingTitle": "The Writing Journey",
+    "writingDesc": "Transitioning from student to author, my books became the medium through which I could converse with the world. Each manuscript represents a chapter of personal growth and collective exploration.",
+    "milestonesTitle": "Milestones & Honors",
+    "milestonesSubtitle": "Recognition that serves not as a destination, but as encouragement to continue the work.",
+    "publishedTitle": "Published Works",
+    "publishedDesc": "Author of numerous highly acclaimed books spanning multiple genres and disciplines.",
+    "awardsTitle": "Literary Awards",
+    "awardsDesc": "Recipient of prestigious awards acknowledging distinguished contributions to modern literature.",
+    "lecturesTitle": "Global Lectures",
+    "lecturesDesc": "Invited speaker at international literary festivals and esteemed academic institutions worldwide.",
+    "quote": "Words are leaves; where they most abound, much fruit of sense beneath is rarely found, unless planted with profound intention.",
+    "quoteAuthor": "— Mohammed Ali Burhan",
+    "impactTitle": "Beyond the Pages",
+    "impactDesc1": "Writing is only half the journey. The true impact of literature is realized when it fosters community dialogue and drives social change.",
+    "impactDesc2": "Over the years, I have actively engaged in literacy programs, workshops, and philanthropic initiatives aimed at making education accessible and empowering young voices in our community to tell their own stories.",
+    "ctaTitle": "Immerse Yourself in the Work",
+    "ctaSubtitle": "Discover the books that capture these life experiences, or explore a visual recounting of the journey.",
+    "ctaBooks": "Explore Books",
+    "ctaGallery": "View Gallery"
+  }
+}

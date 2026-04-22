@@ -19,6 +19,7 @@ import {
   Sparkles
 } from "lucide-react";
 import SEO from "@/components/utils/SEO";
+import { useTranslation } from "react-i18next";
 
 const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 30 },
@@ -114,11 +115,12 @@ function BookCard({ src, rotation, x, y, zIndex, delay }: BookProps) {
 
 
 export default function About() {
+  const { t } = useTranslation();
   return (
     <main className="min-h-screen font-sans antialiased text-slate-900 relative flex flex-col bg-slate-50">
       <SEO 
-        title="About Muhammed Ali Burhan | Author & Educator"
-        description="Learn about the journey, experiences, and achievements of Muhammed Ali Burhan. A life dedicated to knowledge, writing, and community."
+        title={t('about.seoTitle')}
+        description={t('about.seoDesc')}
         type="profile"
       />
       <SimpleBackground />
@@ -137,18 +139,18 @@ export default function About() {
             className="space-y-8"
           >
             <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-sm font-medium tracking-wide">
-              <Sparkles className="w-4 h-4" />
-              <span>Author & Educator</span>
+              <Sparkles className="w-4 h-4 ml-1" />
+              <span>{t('about.heroTitle')}</span>
             </div>
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-slate-900 leading-tight">
-              Mohammed Ali <br /> Burhan
+              {t('hero.title')} <br /> {t('hero.subtitle_name')}
             </h1>
             <p className="text-xl md:text-2xl text-slate-600 font-light leading-relaxed max-w-lg">
-              A life dedicated to knowledge, writing, and community.
+              {t('about.heroDesc1')}
             </p>
             <div className="w-20 h-1 bg-amber-500 rounded-full"></div>
             <p className="text-lg text-slate-600 leading-relaxed max-w-md">
-              Through decades of diverse experiences and a relentless pursuit of understanding, my journey has been shaped by the power of words to inspire, educate, and transform.
+              {t('about.heroDesc2')}
             </p>
           </motion.div>
           
@@ -179,8 +181,8 @@ export default function About() {
             variants={fadeInUp}
             className="text-center mb-24"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">The Journey</h2>
-            <p className="text-lg text-slate-500 max-w-2xl mx-auto">Tracing the steps from early curiosity to a lifelong commitment to literature.</p>
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">{t('about.journeyTitle')}</h2>
+            <p className="text-lg text-slate-500 max-w-2xl mx-auto">{t('about.journeySubtitle')}</p>
           </motion.div>
 
           <div className="space-y-24">
@@ -217,11 +219,11 @@ export default function About() {
                 whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}
                 variants={slideInRight}
-                className="space-y-6 order-1 md:order-2 md:pl-12"
+                className="space-y-6 order-1 md:order-2 md:pl-12 md:rtl:pr-12 md:rtl:pl-0"
               >
-                <h3 className="text-3xl font-semibold text-slate-900">Early Roots</h3>
+                <h3 className="text-3xl font-semibold text-slate-900">{t('about.rootsTitle')}</h3>
                 <p className="text-lg text-slate-600 leading-relaxed">
-                  Growing up surrounded by profound texts and diverse cultures, my early life was a tapestry of endless questions. It was in the quiet corners of local libraries that I discovered my passion for storytelling and truth.
+                  {t('about.rootsDesc')}
                 </p>
               </motion.div>
             </div>
@@ -233,11 +235,11 @@ export default function About() {
                 whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}
                 variants={slideInLeft}
-                className="space-y-6 md:pr-12"
+                className="space-y-6 md:pr-12 md:rtl:pl-12 md:rtl:pr-0"
               >
-                <h3 className="text-3xl font-semibold text-slate-900">Academic Pursuits</h3>
+                <h3 className="text-3xl font-semibold text-slate-900">{t('about.academicTitle')}</h3>
                 <p className="text-lg text-slate-600 leading-relaxed">
-                  Formal education provided the structural foundation for my thoughts. Delving deep into historical analysis and philosophical literature, I honed my ability to translate complex ideas into accessible narratives.
+                  {t('about.academicDesc')}
                 </p>
               </motion.div>
               <motion.div 
@@ -274,11 +276,11 @@ export default function About() {
                 whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}
                 variants={slideInRight}
-                className="space-y-6 order-1 md:order-2 md:pl-12"
+                className="space-y-6 order-1 md:order-2 md:pl-12 md:rtl:pr-12 md:rtl:pl-0"
               >
-                <h3 className="text-3xl font-semibold text-slate-900">The Writing Journey</h3>
+                <h3 className="text-3xl font-semibold text-slate-900">{t('about.writingTitle')}</h3>
                 <p className="text-lg text-slate-600 leading-relaxed">
-                  Transitioning from student to author, my books became the medium through which I could converse with the world. Each manuscript represents a chapter of personal growth and collective exploration.
+                  {t('about.writingDesc')}
                 </p>
               </motion.div>
             </div>
@@ -296,8 +298,8 @@ export default function About() {
             variants={fadeInUp}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">Milestones & Honors</h2>
-            <p className="text-lg text-slate-500 max-w-2xl mx-auto">Recognition that serves not as a destination, but as encouragement to continue the work.</p>
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">{t('about.milestonesTitle')}</h2>
+            <p className="text-lg text-slate-500 max-w-2xl mx-auto">{t('about.milestonesSubtitle')}</p>
           </motion.div>
 
           <motion.div 
@@ -312,8 +314,8 @@ export default function About() {
               <div className="w-14 h-14 bg-amber-50 rounded-xl flex items-center justify-center mb-6">
                 <BookOpen className="w-7 h-7 text-amber-600" />
               </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-3">Published Works</h3>
-              <p className="text-slate-600">Author of numerous highly acclaimed books spanning multiple genres and disciplines.</p>
+              <h3 className="text-xl font-semibold text-slate-900 mb-3">{t('about.publishedTitle')}</h3>
+              <p className="text-slate-600">{t('about.publishedDesc')}</p>
             </motion.div>
 
             {/* Card 2 */}
@@ -321,8 +323,8 @@ export default function About() {
               <div className="w-14 h-14 bg-amber-50 rounded-xl flex items-center justify-center mb-6">
                 <Award className="w-7 h-7 text-amber-600" />
               </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-3">Literary Awards</h3>
-              <p className="text-slate-600">Recipient of prestigious awards acknowledging distinguished contributions to modern literature.</p>
+              <h3 className="text-xl font-semibold text-slate-900 mb-3">{t('about.awardsTitle')}</h3>
+              <p className="text-slate-600">{t('about.awardsDesc')}</p>
             </motion.div>
 
             {/* Card 3 */}
@@ -330,8 +332,8 @@ export default function About() {
               <div className="w-14 h-14 bg-amber-50 rounded-xl flex items-center justify-center mb-6">
                 <GraduationCap className="w-7 h-7 text-amber-600" />
               </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-3">Global Lectures</h3>
-              <p className="text-slate-600">Invited speaker at international literary festivals and esteemed academic institutions worldwide.</p>
+              <h3 className="text-xl font-semibold text-slate-900 mb-3">{t('about.lecturesTitle')}</h3>
+              <p className="text-slate-600">{t('about.lecturesDesc')}</p>
             </motion.div>
           </motion.div>
         </div>
@@ -351,9 +353,9 @@ export default function About() {
           >
             <span className="text-amber-500 text-6xl md:text-8xl leading-none font-serif opacity-50 block mb-6">"</span>
             <blockquote className="text-3xl md:text-5xl font-light italic leading-tight mb-8">
-              Words are leaves; where they most abound, much fruit of sense beneath is rarely found, unless planted with profound intention.
+              {t('about.quote')}
             </blockquote>
-            <cite className="text-xl text-amber-400 font-medium tracking-wide not-italic">— Mohammed Ali Burhan</cite>
+            <cite className="text-xl text-amber-400 font-medium tracking-wide not-italic">{t('about.quoteAuthor')}</cite>
           </motion.div>
         </div>
       </section>
@@ -371,13 +373,13 @@ export default function About() {
             >
               <div className="inline-flex flex-col space-y-2">
                 <HeartHandshake className="w-10 h-10 text-amber-600" />
-                <h2 className="text-4xl md:text-5xl font-bold text-slate-900">Beyond the Pages</h2>
+                <h2 className="text-4xl md:text-5xl font-bold text-slate-900">{t('about.impactTitle')}</h2>
               </div>
               <p className="text-xl text-slate-600 leading-relaxed font-light">
-                Writing is only half the journey. The true impact of literature is realized when it fosters community dialogue and drives social change. 
+                {t('about.impactDesc1')}
               </p>
               <p className="text-lg text-slate-600 leading-relaxed">
-                Over the years, I have actively engaged in literacy programs, workshops, and philanthropic initiatives aimed at making education accessible and empowering young voices in our community to tell their own stories.
+                {t('about.impactDesc2')}
               </p>
             </motion.div>
             
@@ -413,20 +415,20 @@ export default function About() {
             variants={fadeInUp}
             className="space-y-8"
           >
-            <h2 className="text-3xl md:text-5xl font-bold text-slate-900">Immerse Yourself in the Work</h2>
+            <h2 className="text-3xl md:text-5xl font-bold text-slate-900">{t('about.ctaTitle')}</h2>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              Discover the books that capture these life experiences, or explore a visual recounting of the journey.
+              {t('about.ctaSubtitle')}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6 w-full">
               <Link to="/gallery?tab=Books" className="w-full sm:w-auto">
                 <DynamicButton className="h-14 px-8 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] font-semibold text-lg hover:-translate-y-1 flex items-center justify-center space-x-2 w-full">
-                  <span>Explore Books</span>
-                  <ArrowRight className="w-5 h-5" />
+                  <span>{t('about.ctaBooks')}</span>
+                  <ArrowRight className="w-5 h-5 rtl:rotate-180" />
                 </DynamicButton>
               </Link>
               <Link to="/gallery" className="w-full sm:w-auto">
                 <DynamicButton className="h-14 px-8 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] font-semibold text-lg hover:-translate-y-1 flex items-center justify-center space-x-2 w-full">
-                  <span>View Gallery</span>
+                  <span>{t('about.ctaGallery')}</span>
                 </DynamicButton>
               </Link>
             </div>

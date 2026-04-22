@@ -9,6 +9,7 @@ import { DynamicButton } from "@/components/ui/DynamicButton";
 import { Play, Loader2 } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 import SEO from "@/components/utils/SEO";
+import { useTranslation } from "react-i18next";
 
 // Official Content curated for the gallery
 const initialGalleryItems: MediaItem[] = [
@@ -92,6 +93,7 @@ const categories = ["All", "Events", "Lectures", "Books"];
 const unifiedButtonStyle = "bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 text-slate-800 hover:bg-blue-50/50 backdrop-blur-md shadow-[0_8px_30px_rgb(0,0,0,0.04)]";
 
 export default function Gallery() {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const tabParam = searchParams.get("tab");
 
@@ -129,7 +131,7 @@ export default function Gallery() {
         setGalleryItems([...initialGalleryItems, ...formattedBooks]);
       } catch (err) {
         console.error("Failed to fetch books", err);
-        setFetchError("Unable to load latest books at this time.");
+        setFetchError("fetchError"); // will map to t in render
       } finally {
         setIsLoading(false);
       }
@@ -173,8 +175,8 @@ export default function Gallery() {
   return (
     <main className="min-h-screen bg-transparent font-sans antialiased text-slate-900 relative flex flex-col">
       <SEO 
-        title="Gallery & Literary Works | Muhammed Ali Burhan"
-        description="Explore the visual and literary gallery of Muhammed Ali Burhan, including events, lectures, and published books."
+        title={t('gallery.seoTitle')}
+        description={t('gallery.seoDesc')}
       />
       <SimpleBackground />
       <Navbar />
@@ -190,10 +192,10 @@ export default function Gallery() {
           className="text-center max-w-3xl mx-auto mb-16"
         >
           <h1 className="text-5xl md:text-6xl font-medium tracking-tight text-slate-900 mb-6 font-serif">
-            Gallery
+            {t('gallery.title')}
           </h1>
           <p className="text-lg text-slate-600 font-light leading-relaxed max-w-xl mx-auto">
-            Moments, events, and contributions of Mohammed Ali Burhan
+            {t('gallery.subtitle')}
           </p>
         </motion.div>
 
@@ -213,7 +215,7 @@ export default function Gallery() {
                     : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/50 hover:shadow-sm bg-transparent border border-transparent"
                 }`}
               >
-                <span className="relative z-10 tracking-wide">{category}</span>
+                <span className="relative z-10 tracking-wide">{t(`gallery.categories.${category}`)}</span>
               </button>
             )
           })}
@@ -221,15 +223,15 @@ export default function Gallery() {
 
         {fetchError && (
           <div className="text-center text-red-500 mb-8 font-medium">
-            {fetchError}
+            {t('gallery.fetchError')}
           </div>
         )}
 
         {isLoading && (activeCategory === "Books" || activeCategory === "All") && galleryItems.filter(i => i.category === 'books').length === 0 ? (
           <div className="flex justify-center p-12">
             <div className="animate-pulse flex items-center justify-center p-8 text-slate-500 bg-white/50 rounded-2xl w-full max-w-sm">
-              <Loader2 className="w-5 h-5 mr-3 animate-spin" />
-              Loading library publications from database...
+              <Loader2 className="w-5 h-5 mr-3 animate-spin md:-ml-2 rtl:mr-0 rtl:ml-3" />
+              {t('gallery.loadingBooks')}
             </div>
           </div>
         ) : (
@@ -256,8 +258,8 @@ export default function Gallery() {
                 />
 
                 {item.isNew && (
-                  <div className="absolute top-4 right-4 z-20 px-3 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-[10px] font-bold uppercase tracking-widest rounded-full shadow-lg shadow-blue-500/30">
-                    New
+                  <div className="absolute top-4 right-4 rtl:right-auto rtl:left-4 z-20 px-3 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-[10px] font-bold uppercase tracking-widest rounded-full shadow-lg shadow-blue-500/30">
+                    {t('gallery.newBadge')}
                   </div>
                 )}
 
@@ -311,11 +313,11 @@ export default function Gallery() {
             >
               {isRefreshing ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Loading from database...</span>
+                  <Loader2 className="w-4 h-4 animate-spin rtl:ml-2" />
+                  <span>{t('gallery.loadingMore')}</span>
                 </>
               ) : (
-                <span>Load More</span>
+                <span>{t('gallery.loadMore')}</span>
               )}
             </DynamicButton>
           </motion.div>

@@ -4,6 +4,7 @@ import { HelmetProvider } from 'react-helmet-async'
 import axios from 'axios'
 import './index.css'
 import App from './App.tsx'
+import './i18n/config';
 
 // Set globally for production deployment so it can point to the backend server
 axios.defaults.baseURL = import.meta.env.VITE_API_URL || '';

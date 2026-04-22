@@ -3,16 +3,19 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import { SocialLinks } from "@/components/shared/SocialLinks";
 import { Menu, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 
 export function Navbar() {
+  const { t } = useTranslation();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
 
   const links = [
-    { name: "Home", path: "/" },
-    { name: "About", path: "/about" },
-    { name: "Gallery", path: "/gallery" },
-    { name: "Books", path: "/gallery?tab=Books" }
+    { name: t("nav.home"), path: "/" },
+    { name: t("nav.about"), path: "/about" },
+    { name: t("nav.gallery"), path: "/gallery" },
+    { name: t("nav.books", "Books"), path: "/gallery?tab=Books" }
   ];
 
   return (
@@ -43,7 +46,7 @@ export function Navbar() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="hidden md:flex items-center space-x-10 text-gray-600 font-medium text-sm"
+          className="hidden md:flex items-center gap-10 text-gray-600 font-medium text-sm"
         >
           {links.map((link) => {
             const isActive = location.pathname === link.path || (link.path === '/' && location.pathname === '');
@@ -67,8 +70,10 @@ export function Navbar() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}
-          className="flex items-center space-x-4"
+          className="flex items-center gap-2 md:gap-4"
         >
+          <LanguageSwitcher />
+
           <div className="hidden md:flex">
             <SocialLinks size="sm" />
           </div>
