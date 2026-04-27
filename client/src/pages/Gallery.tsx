@@ -10,6 +10,7 @@ import { Play, Loader2 } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 import SEO from "@/components/utils/SEO";
 import { useTranslation } from "react-i18next";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Official Content curated for the gallery
 const initialGalleryItems: MediaItem[] = [
@@ -228,11 +229,17 @@ export default function Gallery() {
         )}
 
         {isLoading && (activeCategory === "Books" || activeCategory === "All") && galleryItems.filter(i => i.category === 'books').length === 0 ? (
-          <div className="flex justify-center p-12">
-            <div className="animate-pulse flex items-center justify-center p-8 text-slate-500 bg-white/50 rounded-2xl w-full max-w-sm">
-              <Loader2 className="w-5 h-5 mr-3 animate-spin md:-ml-2 rtl:mr-0 rtl:ml-3" />
-              {t('gallery.loadingBooks')}
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="aspect-[4/3] rounded-2xl overflow-hidden bg-slate-200/60 shadow-sm animate-pulse flex flex-col justify-end p-6 relative">
+                 <div className="absolute inset-0 bg-gradient-to-t from-slate-300/50 to-transparent"></div>
+                 <div className="relative z-10 w-full">
+                    <Skeleton className="h-6 w-3/4 bg-white/50 mb-3" />
+                    <Skeleton className="h-4 w-1/4 bg-white/40 mb-2" />
+                    <Skeleton className="h-3 w-5/6 bg-white/30" />
+                 </div>
+              </div>
+            ))}
           </div>
         ) : (
         <motion.div 

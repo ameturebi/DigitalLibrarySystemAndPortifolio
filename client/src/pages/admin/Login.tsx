@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { AnimatedBackground } from "@/components/layout/AnimatedBackground";
@@ -12,22 +13,21 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setErrorMsg("");
     
     try {
       const response = await axios.post("/api/auth/login", { email, password });
       if (response.data.token) {
         localStorage.setItem("adminToken", response.data.token);
+        toast.success("Authentication successful");
         navigate("/admin/dashboard");
       }
     } catch (error: any) {
-      setErrorMsg(error.response?.data?.message || "Invalid credentials or server error");
+      toast.error(error.response?.data?.message || "Invalid credentials or server error");
     } finally {
       setIsLoading(false);
     }
@@ -78,12 +78,6 @@ export default function Login() {
                   className="bg-white/50 border-slate-200 focus:border-blue-400 transition-colors"
                 />
               </div>
-              
-              {errorMsg && (
-                <div className="p-3 bg-red-50 text-red-600 text-sm rounded-md border border-red-100 font-medium">
-                  {errorMsg}
-                </div>
-              )}
 
               <Button
                 type="submit"

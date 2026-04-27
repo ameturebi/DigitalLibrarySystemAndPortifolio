@@ -2,9 +2,11 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
-import { Plus, LogOut, ExternalLink, Edit2, Trash2, Book as BookIcon, Loader2 } from "lucide-react";
+import { Plus, LogOut, ExternalLink, Edit2, Trash2, Book as BookIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
 import AddBookModal from "@/components/features/admin/AddBookModal";
 
 interface Book {
@@ -70,60 +72,71 @@ export default function Dashboard() {
 
   const handleDeleteBook = async (id: string) => {
     if (!window.confirm("Are you sure you want to permanently delete this book?")) return;
-    try {
-      const token = localStorage.getItem("adminToken");
-      await axios.delete(`/api/books/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setBooks(books.filter(book => book.id !== id));
-    } catch (error) {
-      alert("Error deleting book. Check connection.");
-    }
+    
+    const token = localStorage.getItem("adminToken");
+    const deletePromise = axios.delete(`/api/books/${id}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    toast.promise(deletePromise, {
+      loading: "Deleting book...",
+      success: () => {
+        setBooks(books.filter(book => book.id !== id));
+        return "Book deleted successfully";
+      },
+      error: "Error deleting book. Check connection."
+    });
   };
 
   const handleSaveBook = async (book: Book) => {
-    try {
-      const token = localStorage.getItem("adminToken");
-      const config = { headers: { Authorization: `Bearer ${token}` } };
-      
-      const payload = {
-        title: book.title,
-        price: book.price || 0,
-        description: book.description,
-        image_url: book.imageUrl,
-        publish_date: book.publishDate || null
-      };
+    const token = localStorage.getItem("adminToken");
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    
+    const payload = {
+      title: book.title,
+      price: book.price || 0,
+      description: book.description,
+      image_url: book.imageUrl,
+      publish_date: book.publishDate || null
+    };
 
-      if (editingBook) {
-        // Edit existing book
-        const res = await axios.put(`/api/books/${book.id}`, payload, config);
-        const updated = res.data;
-        setBooks(books.map(b => (b.id === book.id ? {
-          id: updated.id,
-          title: updated.title,
-          price: updated.price,
-          description: updated.description,
-          imageUrl: updated.image_url,
-          publishDate: updated.publish_date
-        } : b)));
-      } else {
-        // Add new book
-        const res = await axios.post(`/api/books`, payload, config);
-        const newBook = res.data;
-        setBooks([{
-          id: newBook.id,
-          title: newBook.title,
-          price: newBook.price,
-          description: newBook.description,
-          imageUrl: newBook.image_url,
-          publishDate: newBook.publish_date
-        }, ...books]);
+    const savePromise = editingBook 
+      ? axios.put(`/api/books/${book.id}`, payload, config)
+      : axios.post(`/api/books`, payload, config);
+
+    toast.promise(savePromise, {
+      loading: editingBook ? "Updating book..." : "Adding book...",
+      success: (res) => {
+        if (editingBook) {
+          const updated = res.data;
+          setBooks(books.map(b => (b.id === book.id ? {
+            id: updated.id,
+            title: updated.title,
+            price: updated.price,
+            description: updated.description,
+            imageUrl: updated.image_url,
+            publishDate: updated.publish_date
+          } : b)));
+          setIsModalOpen(false);
+          return "Book updated successfully!";
+        } else {
+          const newBook = res.data;
+          setBooks([{
+            id: newBook.id,
+            title: newBook.title,
+            price: newBook.price,
+            description: newBook.description,
+            imageUrl: newBook.image_url,
+            publishDate: newBook.publish_date
+          }, ...books]);
+          setIsModalOpen(false);
+          return "Book added successfully!";
+        }
+      },
+      error: (error: any) => {
+        return error.response?.data?.message || error.message || "Unknown error";
       }
-      setIsModalOpen(false);
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || error.message || "Unknown error";
-      alert("Error saving book: " + errorMessage);
-    }
+    });
   };
 
   return (
@@ -178,9 +191,23 @@ export default function Dashboard() {
         )}
 
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <Loader2 className="h-10 w-10 text-primary animate-spin mb-4" />
-            <p className="text-slate-500">Loading publications from database...</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <Card key={i} className="h-full flex flex-col overflow-hidden border-slate-100 shadow-sm animate-pulse">
+                <Skeleton className="w-full aspect-[3/4] rounded-none opacity-50" />
+                <CardHeader className="p-5">
+                  <Skeleton className="h-6 w-3/4 mb-2" />
+                  <Skeleton className="h-4 w-1/4" />
+                </CardHeader>
+                <CardContent className="p-5 pt-0 flex-grow">
+                  <Skeleton className="h-16 w-full" />
+                </CardContent>
+                <CardFooter className="p-5 pt-0 mt-auto flex justify-end gap-3">
+                  <Skeleton className="h-9 w-9 rounded-full" />
+                  <Skeleton className="h-9 w-9 rounded-full" />
+                </CardFooter>
+              </Card>
+            ))}
           </div>
         ) : (
           <>
