@@ -5,7 +5,7 @@ import About from "./pages/About";
 import Login from "./pages/admin/Login";
 import Dashboard from "./pages/admin/Dashboard";
 import ScrollToTop from "./components/utils/ScrollToTop";
-
+import { ErrorBoundary } from "./components/utils/ErrorBoundary";
 import { Toaster } from "sonner";
 
 function App() {
@@ -13,13 +13,15 @@ function App() {
     <BrowserRouter>
       <Toaster position="bottom-right" richColors theme="light" />
       <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/gallery" element={<Gallery />} />
-        <Route path="/admin" element={<Login />} />
-        <Route path="/admin/dashboard" element={<Dashboard />} />
-      </Routes>
+      <ErrorBoundary>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/admin" element={<Login />} />
+          <Route path="/admin/dashboard" element={<Dashboard />} />
+        </Routes>
+      </ErrorBoundary>
     </BrowserRouter>
   );
 }

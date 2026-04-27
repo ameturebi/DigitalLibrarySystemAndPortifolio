@@ -8,14 +8,15 @@ import SEO from "@/components/utils/SEO";
 import { useTranslation } from "react-i18next";
 
 export default function Home() {
+  
   const { t } = useTranslation();
   return (
     <main className="w-full h-screen font-sans antialiased text-slate-900 relative bg-transparent overflow-y-auto overflow-x-hidden snap-y snap-mandatory scroll-smooth">
-      <SEO 
+      <SEO
         title={t('home.seoTitle')}
         description={t('home.seoDesc')}
       />
-      
+
       {/* 
         CRITICAL BACKGROUND RENDER 
         Locked using fixed so it persists while scrolling.
@@ -73,3 +74,5 @@ export default function Home() {
     </main>
   );
 }
+
+
