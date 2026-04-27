@@ -2,7 +2,7 @@ const supabase = require('../config/supabaseClient');
 
 // @desc    Admin Login
 // @route   POST /api/auth/login
-const loginAdmin = async (req, res) => {
+const loginAdmin = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
@@ -13,7 +13,8 @@ const loginAdmin = async (req, res) => {
     });
 
     if (error) {
-      return res.status(401).json({ message: "Invalid email or password" });
+      res.status(401);
+      throw new Error("Invalid email or password");
     }
 
     // 2. If valid -> return success with the logged-in token
@@ -23,7 +24,7 @@ const loginAdmin = async (req, res) => {
       user: data.user.email
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server error during login' });
+    next(error);
   }
 };
 

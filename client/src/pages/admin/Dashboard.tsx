@@ -238,6 +238,8 @@ export default function Dashboard() {
                     <img
                       src={book.imageUrl}
                       alt={book.title}
+                      loading="lazy"
+                      decoding="async"
                       className="relative z-10 h-full w-full object-contain drop-shadow-2xl transition-transform duration-500 group-hover:scale-105"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(book.title)}&size=400&background=random&color=fff`;

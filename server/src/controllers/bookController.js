@@ -1,8 +1,9 @@
 const supabase = require('../config/supabaseClient');
 
 // @desc    Get all books - Everyone can read list (SELECT)
-const getBooks = async (req, res) => {
+const getBooks = async (req, res, next) => {
   try {
+    
     const { data, error } = await supabase
       .from('books')
       .select('*')
@@ -11,12 +12,12 @@ const getBooks = async (req, res) => {
     if (error) throw error;
     res.json(data);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
 // @desc    Create a new book - (INSERT)
-const createBook = async (req, res) => {
+const createBook = async (req, res, next) => {
   const { title, description, price, image_url, publish_date } = req.body;
   
   try {
@@ -28,12 +29,12 @@ const createBook = async (req, res) => {
     if (error) throw error;
     res.status(201).json(data[0]);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
 // @desc    Update a book - (UPDATE)
-const updateBook = async (req, res) => {
+const updateBook = async (req, res, next) => {
   const { id } = req.params;
   const { title, description, price, image_url, publish_date } = req.body;
 
@@ -45,16 +46,19 @@ const updateBook = async (req, res) => {
       .select();
 
     if (error) throw error;
-    if (data.length === 0) return res.status(404).json({ message: 'Book not found' });
+    if (data.length === 0) {
+      res.status(404);
+      throw new Error('Book not found');
+    }
     
     res.json(data[0]);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
 // @desc    Delete a book - (DELETE)
-const deleteBook = async (req, res) => {
+const deleteBook = async (req, res, next) => {
   const { id } = req.params;
 
   try {
@@ -65,11 +69,14 @@ const deleteBook = async (req, res) => {
       .select();
 
     if (error) throw error;
-    if (data.length === 0) return res.status(404).json({ message: 'Book not found' });
+    if (data.length === 0) {
+      res.status(404);
+      throw new Error('Book not found');
+    }
     
     res.json({ message: 'Book deleted successfully!' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
