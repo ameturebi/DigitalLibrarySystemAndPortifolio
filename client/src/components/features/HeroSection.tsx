@@ -3,20 +3,23 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import hero1 from "@/assets/hero-1.png";
+import hero2 from "@/assets/hero-2.png";
+import hero3 from "@/assets/hero-3.png";
 
 const slideData = [
   {
-    image: "/src/assets/hero-1.png",
+    image: hero1,
     subtitleKey: "hero.slide1",
     theme: "from-blue-500/20 to-purple-500/20 border-blue-500/30 text-slate-800 hover:bg-blue-50/50",
   },
   {
-    image: "/src/assets/hero-2.png",
+    image: hero2,
     subtitleKey: "hero.slide2",
     theme: "from-purple-500/20 to-pink-500/20 border-purple-500/30 text-slate-800 hover:bg-purple-50/50",
   },
   {
-    image: "/src/assets/hero-3.png",
+    image: hero3,
     subtitleKey: "hero.slide3",
     theme: "from-cyan-500/20 to-blue-500/20 border-cyan-500/30 text-slate-800 hover:bg-cyan-50/50",
   }

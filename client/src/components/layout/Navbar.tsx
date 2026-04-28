@@ -5,6 +5,7 @@ import { SocialLinks } from "@/components/shared/SocialLinks";
 import { Menu, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import logo from "@/assets/logo.png";
 
 export function Navbar() {
   const { t } = useTranslation();
@@ -27,18 +28,18 @@ export function Navbar() {
           animate={{ opacity: 1, x: 0 }}
           className="flex items-center space-x-3 cursor-pointer group"
         >
-          <Link to="/" className="relative flex items-center justify-center w-12 h-12 bg-transparent rounded-lg group-hover:bg-primary/5 transition-colors overflow-hidden">
+          <Link to="/" className="relative flex items-center justify-center w-12 h-12 bg-primary/10 rounded-xl group-hover:bg-primary/20 transition-all duration-300 overflow-hidden border border-primary/5 shadow-inner">
             <img 
-              src="/src/assets/logo.png" 
+              src={logo} 
               alt="MA Logo" 
-              className="w-full h-full object-contain"
+              className="w-full h-full object-contain p-1.5"
               onError={(e) => {
-                // Fallback to the text layout if the image isn't loaded yet
-                (e.target as HTMLImageElement).outerHTML = `<span class="text-2xl font-bold tracking-tighter text-gray-900" style="font-family: sans-serif;">M<span class="absolute left-3.5 top-3">A</span></span>`;
+                // Fallback to a better styled initials layout if the image isn't loaded
+                (e.target as HTMLImageElement).outerHTML = `<div class="flex items-center justify-center w-full h-full bg-primary/10 text-primary font-bold text-xl tracking-tighter">MA</div>`;
               }}
             />
           </Link>
-          <span className="font-bold text-sm tracking-tight text-gray-800">Muhammad Ali</span>
+          <span className="font-bold text-base tracking-tight text-slate-800 group-hover:text-primary transition-colors duration-300">Muhammad Ali</span>
         </motion.div>
 
         {/* Desktop Navigation Links */}
